@@ -23,6 +23,15 @@ public class MainScreen extends AppCompatActivity{
     private ViewPager viewPager;
     private FloatingActionButton fab;
 
+
+    /*
+    This function initializes the toolbar, tabLayout, and fab. The tabLayout is used to view All, On Campus, and OffCampus events.
+    The fab is used to create a new event. The setOnCLickListener waits for a click, once there is a click, a new intent is created
+    to start a new activity with the addEvent class.
+
+    @param  savedInstanceState  any saved information related to current activity state
+    @see    toolbar, tabLayout, fab
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +59,11 @@ public class MainScreen extends AppCompatActivity{
 
     }
 
+    /*
+    This function adds fragments to the tabLayout and labels them accordingly.
+
+    @param  ViewPager   helps supply and manage lifecycle of each page
+     */
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new OneFragment(), "All");
@@ -57,6 +71,7 @@ public class MainScreen extends AppCompatActivity{
         adapter.addFragment(new ThreeFragment(), "Off Campus");
         viewPager.setAdapter(adapter);
     }
+
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
@@ -66,21 +81,43 @@ public class MainScreen extends AppCompatActivity{
             super(manager);
         }
 
+        /*
+        This function returns the item at a certain position
+
+        @param  position    position you want more information about
+        @return fragment
+         */
         @Override
         public Fragment getItem(int position) {
             return mFragmentList.get(position);
         }
 
+        /*
+        This function returns how many fragments are in the tabLayout
+
+        @return size of fragment list
+         */
         @Override
         public int getCount() {
             return mFragmentList.size();
         }
 
+        /*
+        this function adds fragments to the tabLayout
+
+        @param  fragment, title     specific fragment and name you want assigned to the tab
+         */
         public void addFragment(Fragment fragment, String title) {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
         }
 
+        /*
+        This function returns the page title at a certain position of the tabLayout
+
+        @param position you want more information about
+        @return get character sequence at that position
+         */
         @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
