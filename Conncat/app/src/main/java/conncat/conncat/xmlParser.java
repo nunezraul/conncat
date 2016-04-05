@@ -30,6 +30,13 @@ public class xmlParser {
     static final String KEY_CALENDAR = "calendar";
     static final String KEY_DESCRIPTION = "description";
 
+    /**
+     * Returns a list of type EventData which contains all the events.
+     * It gets the events from the xml file by parsing it
+     *
+     * @param xml   The xml file with the data for the events
+     * @return      the list containing the events
+     */
 
     public static List<EventData> getEvents(InputStream xml){
         //List of events that will be returned

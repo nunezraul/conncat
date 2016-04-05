@@ -33,13 +33,14 @@ public class OneFragment extends Fragment{
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        /*--- Called upon the creation of the class, saves the instance of the state   ---*/
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Inflate the layout for this fragment, sets the listView declared in the layout file, calls the bindlistView()
         view = inflater.inflate(R.layout.fragment_one, container, false);
         listView = (ListView) view.findViewById(R.id.eventList);
         bindlistview();
@@ -49,6 +50,10 @@ public class OneFragment extends Fragment{
 
     }
 
+    /**
+     * The function handles the task of calling the proper function to download
+     * and display the list of events
+     */
     public void bindlistview(){
         String stringUrlXML = "http://events.ucmerced.edu:7070/feeder/main/eventsFeed.do?f=y&sort=dtstart.utc:asc&fexpr=(categories.href!=%22/public/.bedework/categories/sys/Ongoing%22)%20and%20(entity_type=%22event%22%7Centity_type=%22todo%22)&skinName=list-xml&count=200";
 

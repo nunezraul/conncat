@@ -20,6 +20,16 @@ public class EventAdapter extends ArrayAdapter<EventData> {
         super(context, textViewResourceId, events);
     }
 
+    /**
+     * An adapter for the list view that adapts a list
+     * of type EventData into the listview
+     *
+     * @param pos the index for the arraylist
+     * @param convertView the new view that will be used to display the events.
+     * @param event the list of events
+     * @return returns a view with the appropriate fields set with the data
+     */
+
     @Override
     public View getView(int pos, View convertView, ViewGroup event){
         RelativeLayout row = (RelativeLayout)convertView;

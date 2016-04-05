@@ -17,12 +17,19 @@ import java.util.List;
  * Created by nunez on 4/3/2016.
  */
 public class downloadXML {
+    /**
+     * Returns a string with the contents of the XML file in it.
+     * The myurl argument must specify an absolute url.
+     * The method tries to create a connection and download the
+     * xml from the url. It than converts the inputstream into a string
+     * and returns it.
+     *
+     * @param myurl a url pointing to the site with the xml
+     * @return      the string with the contents of the xml
 
+     */
     public String downloadXML(String myurl) throws IOException {
         InputStream is = null;
-        // Only display the first 500 characters of the retrieved
-        // web page content.
-        int len = 500;
 
         try {
             URL url = new URL(myurl);
@@ -38,7 +45,7 @@ public class downloadXML {
             is = conn.getInputStream();
 
             // Convert the InputStream into a string
-            String contentAsString = readIt(is, len);
+            String contentAsString = readIt(is);
             //InputStream content = is;
             return contentAsString;
 
@@ -52,8 +59,15 @@ public class downloadXML {
         }
     }
 
-    // Reads an InputStream and converts it to a String.
-    public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
+    /**
+     * Converts an inputstream into a string
+     *
+     * @param stream    The input stream that is to be converted into a string
+     * @return          The string with the content of the input stream
+     * @throws IOException
+     * @throws UnsupportedEncodingException
+     */
+    public String readIt(InputStream stream) throws IOException, UnsupportedEncodingException {
         /*Reader reader = null;
         reader = new InputStreamReader(stream, "UTF-8");
         char[] buffer = new char[len];
