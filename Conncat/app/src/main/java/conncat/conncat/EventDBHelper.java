@@ -2,6 +2,7 @@ package conncat.conncat;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -11,6 +12,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -19,7 +22,7 @@ import java.io.OutputStream;
 public class EventDBHelper extends SQLiteOpenHelper {
 
     //The Android's default system path of your application database.
-    private static String DB_PATH = "/data/data/conncat.conncat/databases";
+    private static String DB_PATH = "/data/data/conncat.conncat/databases/";
     private static String DB_NAME = "conncat.db";
 
     private SQLiteDatabase conncat;
@@ -128,16 +131,44 @@ public class EventDBHelper extends SQLiteOpenHelper {
     }
 
     public void add(EventData event){
+        if(event.getName() == null)
+            return;
 
-        String sql = "SELECT FROM Events WHERE " +
-                KEY_NAME + " LIKE " + event.getName() + ";";
+        String sql = "SELECT * FROM Events WHERE " +
+                KEY_NAME + " LIKE '%" + event.getName() + "%';";
         Cursor cursor = conncat.rawQuery(sql, null);
+
         if(cursor.getCount() <= 0){
-            sql = "INSERT into Events (name, host, start_date, end_date, start_time, end_time, address, description, source) VALUES ("
-                    + event.getName() + ", " + event.getHost() + ", " + event.getStartDate() + ", " + event.getEndDate() + ", "
-                    + event.startTime + ", " + event.endTime + ", " + event.getAddress() + ", " + event.getDescription() + ", " + event.getSource() + ";";
+            sql = "INSERT into Events (name, host, start_date, end_date, start_time, end_time, address, description, source) VALUES ('"
+                    + event.getName() + "', '" + event.getHost() + "', '" + event.getStartDate() + "', '" + event.getEndDate() + "', '"
+                    + event.startTime + "', '" + event.endTime + "', '" + event.getAddress() + "', '" + event.getDescription() + "', '" + event.getSource() + "';";
+            //sql = DatabaseUtils.sqlEscapeString(sql);
             conncat.execSQL(sql);
         }
+    }
+
+    public List<EventData> getAllEvents(){
+        String sql = "SELECT * FROM Events ORDER BY date(start_date);";
+        Cursor cursor = conncat.rawQuery(sql, null);
+        List<EventData> ed = new ArrayList<EventData>();
+        if(cursor.moveToFirst()){
+            do{
+                EventData eventData = new EventData();
+                eventData.setName(cursor.getString(cursor.getColumnIndex("name")));
+                eventData.setHost(cursor.getString(cursor.getColumnIndex("host")));
+                eventData.setStartDate(cursor.getString(cursor.getColumnIndex("start_date")));
+                eventData.setEndDate(cursor.getString(cursor.getColumnIndex("end_date")));
+                eventData.setStartTime(cursor.getString(cursor.getColumnIndex("start_time")));
+                eventData.setEndTime(cursor.getString(cursor.getColumnIndex("end_time")));
+                eventData.setAddress(cursor.getString(cursor.getColumnIndex("address")));
+                eventData.setDescription(cursor.getString(cursor.getColumnIndex("description")));
+                eventData.setSource(cursor.getString(cursor.getColumnIndex("source")));
+                ed.add(eventData);
+
+            }while(cursor.moveToNext());
+        }
+        return ed;
+
     }
 
     @Override

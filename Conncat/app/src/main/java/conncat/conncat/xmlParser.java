@@ -1,5 +1,7 @@
 package conncat.conncat;
 
+import android.database.DatabaseUtils;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -102,56 +104,57 @@ public class xmlParser {
                         }
                         else if(tagname.equalsIgnoreCase(KEY_YEAR)){
                             if(start){
-                                startyear = curText;
+                                startyear = DatabaseUtils.sqlEscapeString(curText);
                             }
                             else{
-                                endyear = curText;
+                                endyear = DatabaseUtils.sqlEscapeString(curText);
                             }
                         }
                         else if(tagname.equalsIgnoreCase(KEY_MONTH)){
                             if(start){
-                                startmonth = curText;
+                                startmonth = DatabaseUtils.sqlEscapeString(curText);
                             }
                             else{
-                                endmonth = curText;
+                                endmonth = DatabaseUtils.sqlEscapeString(curText);
                             }
                         }
                         else if(tagname.equalsIgnoreCase(KEY_DAY)){
                             if(start){
-                                startday = curText;
+                                startday = DatabaseUtils.sqlEscapeString(curText);
                             }
                             else{
-                                endday = curText;
+                                endday = DatabaseUtils.sqlEscapeString(curText);
                             }
                         }
                         else if(tagname.equalsIgnoreCase(KEY_HOUR)){
                             if(start){
-                                startHour = curText;
+                                startHour = DatabaseUtils.sqlEscapeString(curText);
                             }
                             else{
-                                endHour = curText;
+                                endHour = DatabaseUtils.sqlEscapeString(curText);
                             }
                         }
                         else if(tagname.equalsIgnoreCase(KEY_MIN)){
                             if(start){
-                                startMin = curText;
+                                startMin = DatabaseUtils.sqlEscapeString(curText);
                             }
                             else{
-                                endMin = curText;
+                                endMin = DatabaseUtils.sqlEscapeString(curText);
                             }
                         }
                         else if(tagname.equalsIgnoreCase(KEY_SUMMARY)){
                             if(!calendar)
-                                curEvent.setName(curText);
+                                curEvent.setName(DatabaseUtils.sqlEscapeString(curText));
                         }
                         else if(tagname.equalsIgnoreCase(KEY_LINK)){
-                            curEvent.setSource(curText);
+                            curEvent.setHost(DatabaseUtils.sqlEscapeString(curText));
+                            curEvent.setSource(DatabaseUtils.sqlEscapeString(curText));
                         }
                         else if(tagname.equalsIgnoreCase(KEY_ADDRESS)){
-                            curEvent.setAddress(curText);
+                            curEvent.setAddress(DatabaseUtils.sqlEscapeString(curText));
                         }
                         else if(tagname.equalsIgnoreCase(KEY_DESCRIPTION)){
-                            curEvent.setDescription(curText);
+                            curEvent.setDescription(DatabaseUtils.sqlEscapeString(curText));
                         }
                         else if(tagname.equalsIgnoreCase(KEY_CALENDAR)){
                             calendar = false;

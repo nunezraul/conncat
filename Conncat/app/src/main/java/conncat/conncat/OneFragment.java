@@ -4,6 +4,8 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -96,7 +98,23 @@ public class OneFragment extends Fragment{
         protected void onPostExecute(String result) {
 
             List<EventData> events = xmlParser.getEvents(new ByteArrayInputStream(result.getBytes()));
-            eventAdapter = new EventAdapter(getActivity(), -1, events);
+            EventDBHelper db = new EventDBHelper(mContex);
+            try {
+                db.createDataBase();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try{
+                db.openDataBase();
+            }catch (SQLException e) {
+                e.printStackTrace();
+            }
+            for(int i = 0; i < events.size(); i++){
+                db.add(events.get(i));
+            }
+
+            List<EventData> ev = db.getAllEvents();
+            eventAdapter = new EventAdapter(getActivity(), -1, ev);
 
             listView.setAdapter(eventAdapter);
 
