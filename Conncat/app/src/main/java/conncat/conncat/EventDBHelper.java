@@ -137,11 +137,10 @@ public class EventDBHelper extends SQLiteOpenHelper {
         String sql = "SELECT * FROM Events WHERE " +
                 KEY_NAME + " LIKE '%" + event.getName() + "%';";
         Cursor cursor = conncat.rawQuery(sql, null);
-
         if(cursor.getCount() <= 0){
-            sql = "INSERT into Events (name, host, start_date, end_date, start_time, end_time, address, description, source) VALUES ('"
-                    + event.getName() + "', '" + event.getHost() + "', '" + event.getStartDate() + "', '" + event.getEndDate() + "', '"
-                    + event.startTime + "', '" + event.endTime + "', '" + event.getAddress() + "', '" + event.getDescription() + "', '" + event.getSource() + "';";
+            sql = "INSERT into Events (name, host, start_date, end_date, start_time, end_time, address, description, source) VALUES ("
+                    + DatabaseUtils.sqlEscapeString(event.getName()) + ", " + DatabaseUtils.sqlEscapeString(event.getHost()) + ", " + DatabaseUtils.sqlEscapeString(event.getStartDate()) + ", " + DatabaseUtils.sqlEscapeString(event.getEndDate()) + ", "
+                    + DatabaseUtils.sqlEscapeString(event.startTime) + ", " + DatabaseUtils.sqlEscapeString(event.endTime) + ", " + DatabaseUtils.sqlEscapeString(event.getAddress()) + ", " + DatabaseUtils.sqlEscapeString(event.getDescription()) + ", " + DatabaseUtils.sqlEscapeString(event.getSource()) + ");";
             //sql = DatabaseUtils.sqlEscapeString(sql);
             conncat.execSQL(sql);
         }

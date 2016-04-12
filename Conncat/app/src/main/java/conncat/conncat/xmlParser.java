@@ -104,57 +104,57 @@ public class xmlParser {
                         }
                         else if(tagname.equalsIgnoreCase(KEY_YEAR)){
                             if(start){
-                                startyear = DatabaseUtils.sqlEscapeString(curText);
+                                startyear = curText;
                             }
                             else{
-                                endyear = DatabaseUtils.sqlEscapeString(curText);
+                                endyear = curText;
                             }
                         }
                         else if(tagname.equalsIgnoreCase(KEY_MONTH)){
                             if(start){
-                                startmonth = DatabaseUtils.sqlEscapeString(curText);
+                                startmonth = curText;
                             }
                             else{
-                                endmonth = DatabaseUtils.sqlEscapeString(curText);
+                                endmonth = curText;
                             }
                         }
                         else if(tagname.equalsIgnoreCase(KEY_DAY)){
                             if(start){
-                                startday = DatabaseUtils.sqlEscapeString(curText);
+                                startday = curText;
                             }
                             else{
-                                endday = DatabaseUtils.sqlEscapeString(curText);
+                                endday = curText;
                             }
                         }
                         else if(tagname.equalsIgnoreCase(KEY_HOUR)){
                             if(start){
-                                startHour = DatabaseUtils.sqlEscapeString(curText);
+                                startHour = curText;
                             }
                             else{
-                                endHour = DatabaseUtils.sqlEscapeString(curText);
+                                endHour = curText;
                             }
                         }
                         else if(tagname.equalsIgnoreCase(KEY_MIN)){
                             if(start){
-                                startMin = DatabaseUtils.sqlEscapeString(curText);
+                                startMin = curText;
                             }
                             else{
-                                endMin = DatabaseUtils.sqlEscapeString(curText);
+                                endMin = curText;
                             }
                         }
                         else if(tagname.equalsIgnoreCase(KEY_SUMMARY)){
                             if(!calendar)
-                                curEvent.setName(DatabaseUtils.sqlEscapeString(curText));
+                                curEvent.setName(curText);
                         }
                         else if(tagname.equalsIgnoreCase(KEY_LINK)){
-                            curEvent.setHost(DatabaseUtils.sqlEscapeString(curText));
-                            curEvent.setSource(DatabaseUtils.sqlEscapeString(curText));
+                            curEvent.setHost(curText);
+                            curEvent.setSource(curText);
                         }
                         else if(tagname.equalsIgnoreCase(KEY_ADDRESS)){
-                            curEvent.setAddress(DatabaseUtils.sqlEscapeString(curText));
+                            curEvent.setAddress(curText);
                         }
                         else if(tagname.equalsIgnoreCase(KEY_DESCRIPTION)){
-                            curEvent.setDescription(DatabaseUtils.sqlEscapeString(curText));
+                            curEvent.setDescription(curText);
                         }
                         else if(tagname.equalsIgnoreCase(KEY_CALENDAR)){
                             calendar = false;
