@@ -22,176 +22,166 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Private"
-        android:id="@+id/checkBox"
-        android:checked="false"
-        android:layout_marginTop="28dp"
-        android:paddingLeft="5dp"
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/toolbar_top"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="2dp"
-        android:textSize="17dp" />
+        android:layout_alignParentBottom="true">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Event Name: "
-        android:id="@+id/eventName"
-        android:layout_marginTop="28dp"
-        android:paddingLeft="10dp"
-        android:layout_below="@+id/checkBox"
-        android:layout_alignParentStart="true" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/title"
+                android:hint="Title"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Event Location: "
-        android:id="@+id/eventLoc"
-        android:paddingLeft="10dp"
-        android:layout_below="@+id/eventName"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="36dp" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/location"
+                android:hint="Address"
+                android:layout_below="@+id/title"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Date/Time: "
-        android:id="@+id/eventDT"
-        android:layout_marginTop="35dp"
-        android:layout_below="@+id/eventLoc"
-        android:layout_alignEnd="@+id/eventName"
-        android:layout_alignParentStart="true"
-        android:paddingLeft="10dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start"
+                android:id="@+id/Start"
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/location"
+                android:layout_alignParentStart="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Description: "
-        android:id="@+id/eventDesc"
-        android:layout_below="@+id/eventDT"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="37dp"
-        android:paddingLeft="10dp" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/start_date"
+                android:layout_below="@+id/Start"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/set_start_date" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Event Photo: "
-        android:id="@+id/eventPhoto"
-        android:layout_marginStart="54dp"
-        android:layout_marginBottom="95dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set Date"
+                android:id="@+id/set_start_date"
+                android:onClick="setStartDate"
+                android:layout_below="@+id/Start"
+                android:layout_alignParentEnd="true" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CREATE EVENT"
-        android:id="@+id/eventButton"
-        android:layout_marginBottom="22dp"
-        android:textColor = "#FFFFFF"
-        android:background="?attr/colorPrimary"
-        android:textSize = "20dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/start_time"
+                android:layout_below="@+id/set_start_date"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/set_start_date" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTextName"
-        android:layout_above="@+id/eventLoc"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/eventLoc"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp" />
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set Time"
+                android:id="@+id/set_start_time"
+                android:onClick="setStartTime"
+                android:layout_alignBottom="@+id/start_time"
+                android:layout_alignStart="@+id/set_start_date" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTextLoc"
-        android:layout_alignBottom="@+id/eventLoc"
-        android:layout_alignEnd="@+id/editTextName"
-        android:layout_alignStart="@+id/editTextName" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="End"
+                android:id="@+id/end"
+                android:layout_below="@+id/start_time"
+                android:layout_alignParentStart="true" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="date"
-        android:ems="10"
-        android:id="@+id/editTextDate"
-        android:layout_alignBottom="@+id/eventDT"
-        android:layout_alignStart="@+id/editTextLoc"
-        android:layout_alignEnd="@+id/eventButton"
-        android:layout_marginRight="35dp" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/end_date"
+                android:layout_below="@+id/end"
+                android:layout_alignParentStart="true"
+                android:layout_alignEnd="@+id/start_time" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="time"
-        android:ems="10"
-        android:id="@+id/editTextTime"
-        android:layout_above="@+id/eventDesc"
-        android:layout_toEndOf="@+id/editTextDate"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="-5dp" />
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set Date"
+                android:id="@+id/set_end_date"
+                android:onClick="SetEndDate"
+                android:layout_alignBottom="@+id/end_date"
+                android:layout_alignStart="@+id/set_start_time" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:id="@+id/editTextDesc"
-        android:layout_alignTop="@+id/eventDesc"
-        android:layout_alignStart="@+id/editTextDate"
-        android:scrollIndicators="right"
-        android:layout_above="@+id/photoButton"
-        android:layout_alignParentEnd="false"
-        android:gravity="left|top" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/end_time"
+                android:layout_below="@+id/end_date"
+                android:layout_alignParentStart="true"
+                android:layout_alignEnd="@+id/end_date" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Upload Photo"
-        android:id="@+id/photoButton"
-        android:layout_alignBottom="@+id/eventPhoto"
-        android:layout_alignEnd="@+id/editTextDesc"
-        android:layout_marginBottom="-10dp" />
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set Time"
+                android:id="@+id/set_end_time"
+                android:onClick="setEndTime"
+                android:layout_alignBottom="@+id/end_time"
+                android:layout_alignStart="@+id/set_end_date" />
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/calenderButton"
-        android:src="@drawable/calender"
-        android:background= "#00ffffff"
-        android:layout_alignTop="@+id/editTextDate"
-        android:layout_alignEnd="@+id/editTextDate" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/host"
+                android:hint="Host"
+                android:layout_below="@+id/end_time"
+                android:layout_alignParentStart="true"
+                android:layout_alignEnd="@+id/location" />
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/timeButton"
-        android:src="@drawable/time"
-        android:background="#00ffffff"
-        android:layout_alignTop="@+id/editTextTime"
-        android:layout_alignEnd="@+id/editTextTime" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:ems="10"
+                android:id="@+id/description"
+                android:hint="Description"
+                android:layout_below="@+id/host"
+                android:layout_alignParentStart="true"
+                android:height="130dp"
+                android:layout_alignEnd="@+id/set_end_time" />
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/addPhotoButton"
-        android:src="@drawable/add_photo"
-        android:background="#00ffffff"
-        android:layout_alignBottom="@+id/eventPhoto"
-        android:layout_centerHorizontal="true" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create Event"
+                android:onClick="createEvent"
+                android:id="@+id/eventButton"
+                android:layout_marginBottom="22dp"
+                android:textColor = "#FFFFFF"
+                android:background="?attr/colorPrimary"
+                android:textSize = "20sp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:layout_below="@+id/description"
+                android:layout_centerInParent="true"/>
+
+
+        </RelativeLayout>
+
+
+
+
+
+    </ScrollView>
 
 </RelativeLayout>

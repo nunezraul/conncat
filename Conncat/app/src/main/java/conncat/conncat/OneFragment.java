@@ -46,9 +46,28 @@ public class OneFragment extends Fragment{
         view = inflater.inflate(R.layout.fragment_one, container, false);
         listView = (ListView) view.findViewById(R.id.eventList);
         bindlistview();
-
-
         return view;
+
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        EventDBHelper db = new EventDBHelper(getContext());
+        try {
+            db.createDataBase();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try{
+            db.openDataBase();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        List<EventData> ev = db.getAllEvents();
+        eventAdapter = new EventAdapter(getActivity(), -1, ev);
+
+        listView.setAdapter(eventAdapter);
 
     }
 

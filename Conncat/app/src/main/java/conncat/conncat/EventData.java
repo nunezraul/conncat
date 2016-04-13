@@ -52,6 +52,10 @@ public class EventData {
         this.startDate = year + "-" + month + "-" + day;
     }
 
+    public void setStartDate(int year, int month, int day){
+        this.startDate = year + "-" + month + "-" + day;
+    }
+
     public void setStartDate(String date){
         this.startDate = date;
     }
@@ -79,6 +83,10 @@ public class EventData {
         this.startTime = hour + ":" + min;
     }
 
+    public void setStartTime(int hour, int min){
+        this.startTime = hour + ":" + min;
+    }
+
     public void setStartTime(String time){
         this.startTime = time;
     }
@@ -89,6 +97,10 @@ public class EventData {
      * @param min the minute the event will end
      */
     public void setEndTime(String hour, String min){
+        this.endTime = hour + ":" + min;
+    }
+
+    public void setEndTime(int hour, int min){
         this.endTime = hour + ":" + min;
     }
 
