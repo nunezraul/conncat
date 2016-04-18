@@ -9,7 +9,7 @@
     <android.support.v7.widget.CardView
         android:layout_width="600dp"
         android:id="@+id/cv"
-        android:layout_height="125dp"
+        android:layout_height="wrap_content"
         card_view:cardElevation="5dp"
         android:layout_gravity="center"
         android:layout_margin="6dp"
@@ -59,4 +59,5 @@
 
 
     </android.support.v7.widget.CardView>
+
 </RelativeLayout>

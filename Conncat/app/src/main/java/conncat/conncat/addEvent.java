@@ -26,7 +26,7 @@ public class addEvent extends AppCompatActivity{
 
     private DatePicker datePicker;
     private Calendar calendar;
-    private EditText title, address, start_date, end_date, start_time, end_time, host, description;
+    private EditText title, address, start_date, end_date, start_time, end_time, host, description, categories;
     private int year, month, day, hour, min;
 
     EventData eventData;
@@ -53,6 +53,7 @@ public class addEvent extends AppCompatActivity{
         end_time = (EditText) findViewById(R.id.end_time);
         address = (EditText) findViewById(R.id.location);
         description = (EditText) findViewById(R.id.description);
+        categories = (EditText) findViewById(R.id.categories);
 
         calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
@@ -116,6 +117,11 @@ public class addEvent extends AppCompatActivity{
             eventData.setHost(host.getText().toString());
             eventData.setDescription(description.getText().toString());
             eventData.setSource("USER");
+            String cat = categories.getText().toString();
+            String[] categories = cat.split("\\W+");
+            for(String ss: categories){
+                eventData.addCategory(ss);
+            }
 
             EventDBHelper db = new EventDBHelper(this);
             try {

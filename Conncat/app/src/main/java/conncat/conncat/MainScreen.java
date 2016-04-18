@@ -1,5 +1,6 @@
 package conncat.conncat;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -130,8 +131,14 @@ public class MainScreen extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            // Handle the camera action
+            final Context context = this;
+            Intent intent = new Intent(context, MainScreen.class);
+            startActivity(intent);
+
         } else if (id == R.id.nav_categories) {
+            final Context context = this;
+            Intent intent = new Intent(context, catActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_slideshow) {
 
