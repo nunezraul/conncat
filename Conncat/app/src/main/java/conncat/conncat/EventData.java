@@ -1,5 +1,8 @@
 package conncat.conncat;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by nunez on 4/2/2016.
  */
@@ -15,6 +18,7 @@ public class EventData {
     String address;
     String description;
     String source;
+    List<String> categories = new ArrayList<String>();
 
     /**
      * Sets the name field from the argument
@@ -130,6 +134,10 @@ public class EventData {
         this.source = source;
     }
 
+    public void addCategory(String cat){
+        categories.add(cat);
+    }
+
     /**
      * Returns the name of the event
      * @return the name of the event
@@ -167,7 +175,7 @@ public class EventData {
      * @return the start date and time of the event
      */
     public String getStartDate(){
-        return "Start date: " + startDate;
+        return startDate;
     }
 
     /**
@@ -175,7 +183,7 @@ public class EventData {
      * @return the end date and time of the event
      */
     public String getEndDate(){
-        return "End date: " + endDate;
+        return endDate;
     }
 
     /**
@@ -201,5 +209,7 @@ public class EventData {
     public String getSource(){
         return source;
     }
+
+    public List<String> getCategories() { return categories; }
 
 }

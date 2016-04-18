@@ -1,5 +1,6 @@
 package conncat.conncat;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
@@ -42,6 +43,9 @@ public class EventDBHelper extends SQLiteOpenHelper {
     public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_SOURCE = "source";
 
+    public static final String KEY_EVENTS = "Events";
+    public static final String KEY_CATEGORIES = "Categories";
+    public static final String KEY_CATEGORY = "type";
 
     public EventDBHelper(Context context) {
 
@@ -138,11 +142,25 @@ public class EventDBHelper extends SQLiteOpenHelper {
                 KEY_NAME + " LIKE '%" + event.getName() + "%';";
         Cursor cursor = conncat.rawQuery(sql, null);
         if(cursor.getCount() <= 0){
-            sql = "INSERT into Events (name, host, start_date, end_date, start_time, end_time, address, description, source) VALUES ("
-                    + DatabaseUtils.sqlEscapeString(event.getName()) + ", " + DatabaseUtils.sqlEscapeString(event.getHost()) + ", " + DatabaseUtils.sqlEscapeString(event.getStartDate()) + ", " + DatabaseUtils.sqlEscapeString(event.getEndDate()) + ", "
-                    + DatabaseUtils.sqlEscapeString(event.startTime) + ", " + DatabaseUtils.sqlEscapeString(event.endTime) + ", " + DatabaseUtils.sqlEscapeString(event.getAddress()) + ", " + DatabaseUtils.sqlEscapeString(event.getDescription()) + ", " + DatabaseUtils.sqlEscapeString(event.getSource()) + ");";
-            //sql = DatabaseUtils.sqlEscapeString(sql);
-            conncat.execSQL(sql);
+            ContentValues values = new ContentValues();
+            values.put(KEY_NAME, event.getName());
+            values.put(KEY_HOST, event.getHost());
+            values.put(KEY_SDATE, event.getStartDate());
+            values.put(KEY_EDATE, event.getEndDate());
+            values.put(KEY_STIME, event.startTime);
+            values.put(KEY_ETIME, event.endTime);
+            values.put(KEY_ADDRESS, event.getAddress());
+            values.put(KEY_DESCRIPTION, event.getDescription());
+            values.put(KEY_SOURCE, event.getSource());
+            long rowid = conncat.insert(KEY_EVENTS, null, values);
+            if(!event.categories.isEmpty()){
+                for(int i = 0; i < event.categories.size(); i++){
+                    ContentValues cat = new ContentValues();
+                    cat.put(KEY_ROWID, rowid);
+                    cat.put(KEY_CATEGORY, event.categories.get(i));
+                    conncat.insert(KEY_CATEGORIES, null, cat);
+                }
+            }
         }
     }
 
@@ -153,15 +171,23 @@ public class EventDBHelper extends SQLiteOpenHelper {
         if(cursor.moveToFirst()){
             do{
                 EventData eventData = new EventData();
-                eventData.setName(cursor.getString(cursor.getColumnIndex("name")));
-                eventData.setHost(cursor.getString(cursor.getColumnIndex("host")));
-                eventData.setStartDate(cursor.getString(cursor.getColumnIndex("start_date")));
-                eventData.setEndDate(cursor.getString(cursor.getColumnIndex("end_date")));
-                eventData.setStartTime(cursor.getString(cursor.getColumnIndex("start_time")));
-                eventData.setEndTime(cursor.getString(cursor.getColumnIndex("end_time")));
-                eventData.setAddress(cursor.getString(cursor.getColumnIndex("address")));
-                eventData.setDescription(cursor.getString(cursor.getColumnIndex("description")));
-                eventData.setSource(cursor.getString(cursor.getColumnIndex("source")));
+                eventData.setName(cursor.getString(cursor.getColumnIndex(KEY_NAME)));
+                eventData.setHost(cursor.getString(cursor.getColumnIndex(KEY_HOST)));
+                eventData.setStartDate(cursor.getString(cursor.getColumnIndex(KEY_SDATE)));
+                eventData.setEndDate(cursor.getString(cursor.getColumnIndex(KEY_EDATE)));
+                eventData.setStartTime(cursor.getString(cursor.getColumnIndex(KEY_STIME)));
+                eventData.setEndTime(cursor.getString(cursor.getColumnIndex(KEY_ETIME)));
+                eventData.setAddress(cursor.getString(cursor.getColumnIndex(KEY_ADDRESS)));
+                eventData.setDescription(cursor.getString(cursor.getColumnIndex(KEY_DESCRIPTION)));
+                eventData.setSource(cursor.getString(cursor.getColumnIndex(KEY_SOURCE)));
+
+                String getCat = "SELECT * FROM Categories WHERE _id = " + cursor.getString(cursor.getColumnIndex(KEY_ROWID)) + ";";
+                Cursor cat = conncat.rawQuery(getCat, null);
+                if(cat.moveToFirst()){
+                    do{
+                        eventData.addCategory(cat.getString(cat.getColumnIndex(KEY_CATEGORY)));
+                    }while(cat.moveToNext());
+                }
                 ed.add(eventData);
 
             }while(cursor.moveToNext());

@@ -5,8 +5,8 @@
     tools:context="info.androidhive.materialtabs.fragments.OneFragment">
 
     <ListView
-        android:layout_width="600dp"
-        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="510dp"
         android:id="@+id/eventList"
         android:divider="@null"/>
 
