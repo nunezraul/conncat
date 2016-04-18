@@ -167,7 +167,7 @@ public class EventData {
      * @return the start date and time of the event
      */
     public String getStartDate(){
-        return startDate + " " + startTime;
+        return "Start date: " + startDate;
     }
 
     /**
@@ -175,7 +175,7 @@ public class EventData {
      * @return the end date and time of the event
      */
     public String getEndDate(){
-        return endDate + " " + endTime;
+        return "End date: " + endDate;
     }
 
     /**
