@@ -25,6 +25,11 @@
         <activity
             android:name=".addEvent"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".catActivity"
+            android:label="@string/title_activity_cat"
+            android:theme="@style/AppTheme"></activity>
 </application>
 
 </manifest>
