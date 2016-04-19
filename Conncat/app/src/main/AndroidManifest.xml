@@ -43,8 +43,11 @@
         <activity
             android:name=".catActivity"
             android:label="@string/title_activity_cat"
-<<<<<<< HEAD
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="conncat.conncat.MainScreen" />
+        </activity>
         <activity
             android:name=".editEvent"
             android:label="@string/title_activity_edit_event"
@@ -54,15 +57,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="conncat.conncat.viewEvent" />
         </activity>
-    </application>
 
-</manifest>
-=======
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="conncat.conncat.MainScreen" />
-        </activity>
+
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -78,7 +75,6 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"></activity>
-    </application>
 
+    </application>
 </manifest>
->>>>>>> 7ced35e18c3a54701e632598bae74de7560960a3
