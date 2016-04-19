@@ -8,5 +8,9 @@
     <string name="large_text">
         "categories page"
     </string>
+<<<<<<< HEAD
     <string name="title_activity_edit_event">editEvent</string>
+=======
+    <string name="title_activity_maps">Map</string>
+>>>>>>> 7ced35e18c3a54701e632598bae74de7560960a3
 </resources>

@@ -119,6 +119,11 @@ public class MainScreen extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+
+        } else if (id == R.id.action_map){
+            final Context context = this;
+            Intent intent = new Intent(context, MapsActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
