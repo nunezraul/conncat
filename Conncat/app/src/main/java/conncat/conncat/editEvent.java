@@ -1,51 +1,38 @@
 package conncat.conncat;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.TimePickerDialog;
 import android.database.SQLException;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
-
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Objects;
 
-
-public class addEvent extends AppCompatActivity{
-    private Toolbar toolbar;
+public class editEvent extends AppCompatActivity {
 
     private DatePicker datePicker;
     private Calendar calendar;
     private EditText title, address, start_date, end_date, start_time, end_time, host, description, categories;
+    private EditText rowid;
     private int year, month, day, hour, min;
 
     EventData eventData;
 
-    /*
-    This function sets up the toolbar
-
-    @param  savedInstanceState  any saved information related to current activity state
-    @see    toolbar
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_event);
-
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setContentView(R.layout.activity_edit_event);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        //setTitle("Create Event");
 
         title = (EditText) findViewById(R.id.title);
         host = (EditText) findViewById(R.id.host);
@@ -56,6 +43,8 @@ public class addEvent extends AppCompatActivity{
         address = (EditText) findViewById(R.id.location);
         description = (EditText) findViewById(R.id.description);
         categories = (EditText) findViewById(R.id.categories);
+        rowid = (EditText) findViewById(R.id.rowid);
+
 
         calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
@@ -64,10 +53,45 @@ public class addEvent extends AppCompatActivity{
 
         eventData = new EventData();
 
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            long rowid = extras.getLong("eventID");
+            EventDBHelper db = new EventDBHelper(this);
+            try {
+                db.createDataBase();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                db.openDataBase();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            eventData = db.getEvent(rowid);
+
+            db.close();
+
+        }
+
+        setTitle("Edit Event");
+
+        title.setText(eventData.getName());
+        host.setText(eventData.getHost());
+        start_date.setText(eventData.getStartDate());
+        end_date.setText(eventData.getEndDate());
+        start_time.setText(eventData.startTime);
+        end_time.setText(eventData.endTime);
+        address.setText(eventData.getAddress());
+        description.setText(eventData.getDescription());
+        rowid.setText(Objects.toString(eventData.getRowid(), null));
+        String cat = "";
+        for(int i = 0; i < eventData.categories.size(); i++){
+            cat += eventData.categories.get(i) + ", ";
+        }
+        categories.setText(cat);
+
     }
 
-
-    @SuppressWarnings("deprecation")
     public void setStartDate(View view) {
         DialogFragment newFragment = new DatePickerFragment(){
             @Override
@@ -108,7 +132,7 @@ public class addEvent extends AppCompatActivity{
         newFragment.show(getFragmentManager(), "timePicker");
     }
 
-    public void createEvent(View view) {
+    public void saveEvent(View view) {
         if (!title.getText().toString().isEmpty() && !address.getText().toString().isEmpty() && !start_date.getText().toString().isEmpty() && !start_time.getText().toString().isEmpty() && !end_date.getText().toString().isEmpty() && !end_time.getText().toString().isEmpty() && !host.getText().toString().isEmpty() && !description.getText().toString().isEmpty()) {
             eventData.setName(title.getText().toString());
             eventData.setAddress(address.getText().toString());
@@ -137,7 +161,7 @@ public class addEvent extends AppCompatActivity{
                 e.printStackTrace();
             }
             try {
-                db.add(eventData);
+                db.updateEvent(eventData);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -146,6 +170,4 @@ public class addEvent extends AppCompatActivity{
         }
     }
 
-
 }
-

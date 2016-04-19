@@ -9,6 +9,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -196,6 +198,36 @@ public class EventDBHelper extends SQLiteOpenHelper {
         }
         return ed;
 
+    }
+
+    public void updateEvent(EventData event){
+        if(event.getName() == null)
+            return;
+
+
+        String rowid = Objects.toString(event.getRowid(), null);
+        Log.d("DATABSE", "UPDATING EVENT " + rowid + " and shit");
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, event.getName());
+        values.put(KEY_HOST, event.getHost());
+        values.put(KEY_SDATE, event.getStartDate());
+        values.put(KEY_EDATE, event.getEndDate());
+        values.put(KEY_STIME, event.startTime);
+        values.put(KEY_ETIME, event.endTime);
+        values.put(KEY_ADDRESS, event.getAddress());
+        values.put(KEY_DESCRIPTION, event.getDescription());
+        values.put(KEY_SOURCE, event.getSource());
+        conncat.update(KEY_EVENTS, values, "_id = " + rowid, null);
+
+        conncat.delete(KEY_CATEGORIES, rowid, null);
+        if(!event.categories.isEmpty()){
+            for(int i = 0; i < event.categories.size(); i++){
+                ContentValues cat = new ContentValues();
+                cat.put(KEY_ROWID, rowid);
+                cat.put(KEY_CATEGORY, event.categories.get(i));
+                conncat.update(KEY_CATEGORIES,cat, "_id=" + rowid, null);
+            }
+        }
     }
 
     public EventData getEvent(long id){
