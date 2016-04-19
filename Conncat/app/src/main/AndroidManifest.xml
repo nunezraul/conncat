@@ -24,7 +24,6 @@
         <activity
             android:name=".addEvent"
             android:screenOrientation="portrait" />
-<<<<<<< HEAD
         <activity
             android:name=".viewEvent"
             android:label="@string/title_activity_view_event"
@@ -34,14 +33,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="conncat.conncat.MainScreen" />
         </activity>
-    </application>
-=======
 
         <activity
             android:name=".catActivity"
             android:label="@string/title_activity_cat"
             android:theme="@style/AppTheme"></activity>
-</application>
->>>>>>> 52ceecc43181b0c2f274d9233a0a852f9301391a
+    </application>
+
+
 
 </manifest>

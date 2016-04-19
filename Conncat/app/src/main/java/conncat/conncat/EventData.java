@@ -18,6 +18,7 @@ public class EventData {
     String address;
     String description;
     String source;
+    long rowid;
     List<String> categories = new ArrayList<String>();
 
     /**
@@ -134,6 +135,10 @@ public class EventData {
         this.source = source;
     }
 
+    public void setRowid(long id){
+        rowid = id;
+    }
+
     public void addCategory(String cat){
         categories.add(cat);
     }
@@ -209,6 +214,8 @@ public class EventData {
     public String getSource(){
         return source;
     }
+
+    public long getRowid(){ return rowid;}
 
     public List<String> getCategories() { return categories; }
 

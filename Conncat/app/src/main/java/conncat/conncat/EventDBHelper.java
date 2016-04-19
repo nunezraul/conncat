@@ -181,6 +181,7 @@ public class EventDBHelper extends SQLiteOpenHelper {
                 eventData.setAddress(cursor.getString(cursor.getColumnIndex(KEY_ADDRESS)));
                 eventData.setDescription(cursor.getString(cursor.getColumnIndex(KEY_DESCRIPTION)));
                 eventData.setSource(cursor.getString(cursor.getColumnIndex(KEY_SOURCE)));
+                eventData.setRowid(cursor.getLong(cursor.getColumnIndex(KEY_ROWID)));
 
                 String getCat = "SELECT * FROM Categories WHERE _id = " + cursor.getString(cursor.getColumnIndex(KEY_ROWID)) + ";";
                 Cursor cat = conncat.rawQuery(getCat, null);
@@ -212,6 +213,7 @@ public class EventDBHelper extends SQLiteOpenHelper {
             eventData.setAddress(cursor.getString(cursor.getColumnIndex(KEY_ADDRESS)));
             eventData.setDescription(cursor.getString(cursor.getColumnIndex(KEY_DESCRIPTION)));
             eventData.setSource(cursor.getString(cursor.getColumnIndex(KEY_SOURCE)));
+            eventData.setRowid(cursor.getLong(cursor.getColumnIndex(KEY_ROWID)));
 
             String getCat = "SELECT * FROM Categories WHERE _id = " + cursor.getString(cursor.getColumnIndex(KEY_ROWID)) + ";";
             Cursor cat = conncat.rawQuery(getCat, null);

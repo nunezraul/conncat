@@ -73,7 +73,7 @@ public class OneFragment extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(view.getContext(), viewEvent.class);
-                intent.putExtra("eventID", ++id);
+                intent.putExtra("eventID", eventAdapter.getItem(position).getRowid());
                 startActivity(intent);
             }
         });
