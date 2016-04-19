@@ -3,6 +3,7 @@ package conncat.conncat;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.io.ByteArrayInputStream;
@@ -66,8 +68,15 @@ public class OneFragment extends Fragment{
         }
         List<EventData> ev = db.getAllEvents();
         eventAdapter = new EventAdapter(getActivity(), -1, ev);
-
         listView.setAdapter(eventAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(view.getContext(), viewEvent.class);
+                intent.putExtra("eventID", ++id);
+                startActivity(intent);
+            }
+        });
 
     }
 
