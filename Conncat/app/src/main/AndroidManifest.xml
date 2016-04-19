@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="conncat.conncat">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -21,15 +21,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".addEvent"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".viewEvent"
+            android:label="@string/title_activity_view_event"
+            android:parentActivityName=".MainScreen"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="conncat.conncat.MainScreen" />
+        </activity>
 
         <activity
             android:name=".catActivity"
             android:label="@string/title_activity_cat"
             android:theme="@style/AppTheme"></activity>
-</application>
+    </application>
+
+
 
 </manifest>

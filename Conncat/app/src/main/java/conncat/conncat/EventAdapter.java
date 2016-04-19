@@ -39,7 +39,7 @@ public class EventAdapter extends ArrayAdapter<EventData> {
             LayoutInflater inflater = (LayoutInflater)this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = (RelativeLayout)inflater.inflate(R.layout.row_event, null);
         }
-
+        //getting each event and setting them so that it shows up on the xml
         TextView title = (TextView)row.findViewById(R.id.title);
         TextView date = (TextView)row.findViewById(R.id.date);
         TextView time = (TextView)row.findViewById(R.id.time);

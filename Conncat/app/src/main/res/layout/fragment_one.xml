@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="info.androidhive.materialtabs.fragments.OneFragment">
-
+    <!-- just making a listview so that we can use cardview inside each of the listview slot-->
     <ListView
         android:layout_width="fill_parent"
         android:layout_height="510dp"

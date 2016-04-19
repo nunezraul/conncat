@@ -1,5 +1,6 @@
 package conncat.conncat;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -180,6 +181,7 @@ public class EventDBHelper extends SQLiteOpenHelper {
                 eventData.setAddress(cursor.getString(cursor.getColumnIndex(KEY_ADDRESS)));
                 eventData.setDescription(cursor.getString(cursor.getColumnIndex(KEY_DESCRIPTION)));
                 eventData.setSource(cursor.getString(cursor.getColumnIndex(KEY_SOURCE)));
+                eventData.setRowid(cursor.getLong(cursor.getColumnIndex(KEY_ROWID)));
 
                 String getCat = "SELECT * FROM Categories WHERE _id = " + cursor.getString(cursor.getColumnIndex(KEY_ROWID)) + ";";
                 Cursor cat = conncat.rawQuery(getCat, null);
@@ -193,6 +195,35 @@ public class EventDBHelper extends SQLiteOpenHelper {
             }while(cursor.moveToNext());
         }
         return ed;
+
+    }
+
+    public EventData getEvent(long id){
+        EventData eventData = new EventData();
+        String sql = "SELECT * FROM Events WHERE _id = " + id + ";";
+        Cursor cursor = conncat.rawQuery(sql, null);
+
+        if(cursor.moveToFirst()){
+            eventData.setName(cursor.getString(cursor.getColumnIndex(KEY_NAME)));
+            eventData.setHost(cursor.getString(cursor.getColumnIndex(KEY_HOST)));
+            eventData.setStartDate(cursor.getString(cursor.getColumnIndex(KEY_SDATE)));
+            eventData.setEndDate(cursor.getString(cursor.getColumnIndex(KEY_EDATE)));
+            eventData.setStartTime(cursor.getString(cursor.getColumnIndex(KEY_STIME)));
+            eventData.setEndTime(cursor.getString(cursor.getColumnIndex(KEY_ETIME)));
+            eventData.setAddress(cursor.getString(cursor.getColumnIndex(KEY_ADDRESS)));
+            eventData.setDescription(cursor.getString(cursor.getColumnIndex(KEY_DESCRIPTION)));
+            eventData.setSource(cursor.getString(cursor.getColumnIndex(KEY_SOURCE)));
+            eventData.setRowid(cursor.getLong(cursor.getColumnIndex(KEY_ROWID)));
+
+            String getCat = "SELECT * FROM Categories WHERE _id = " + cursor.getString(cursor.getColumnIndex(KEY_ROWID)) + ";";
+            Cursor cat = conncat.rawQuery(getCat, null);
+            if(cat.moveToFirst()){
+                do{
+                    eventData.addCategory(cat.getString(cat.getColumnIndex(KEY_CATEGORY)));
+                }while(cat.moveToNext());
+            }
+        }
+        return eventData;
 
     }
 
