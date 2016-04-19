@@ -37,6 +37,10 @@ public class catActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cat);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        setTitle("Categories");
         String[] Categories= getResources().getStringArray(R.array.Categories);
         //  this.setListAdapter(new ArrayAdapter<String>(this, R.layout.cat_array, R.id.label, Categories));
 

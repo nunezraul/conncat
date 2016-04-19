@@ -37,7 +37,11 @@
         <activity
             android:name=".catActivity"
             android:label="@string/title_activity_cat"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="conncat.conncat.MainScreen" />
+        </activity>
     </application>
 
 
