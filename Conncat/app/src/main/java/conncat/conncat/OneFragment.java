@@ -142,6 +142,7 @@ public class OneFragment extends Fragment{
             }
 
             List<EventData> ev = db.getAllEvents();
+            db.close();
             eventAdapter = new EventAdapter(getActivity(), -1, ev);
 
             listView.setAdapter(eventAdapter);

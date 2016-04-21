@@ -83,6 +83,23 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_below="@+id/eventCategories"
+                android:text="Location: "
+                android:id="@+id/location"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_below="@+id/eventCategories"
+                android:layout_toRightOf="@+id/location"
+                android:text="Medium Text"
+                android:id="@+id/eventLocation"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_below="@+id/eventLocation"
                 android:layout_marginTop="8dp"
                 android:text="Description: "
                 android:id="@+id/description"/>

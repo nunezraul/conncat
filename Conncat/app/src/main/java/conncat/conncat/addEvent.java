@@ -41,11 +41,10 @@ public class addEvent extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_event);
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //setTitle("Create Event");
+        setTitle("Create Event");
 
         title = (EditText) findViewById(R.id.title);
         host = (EditText) findViewById(R.id.host);

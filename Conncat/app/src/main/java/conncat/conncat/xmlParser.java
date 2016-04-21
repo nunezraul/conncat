@@ -51,6 +51,7 @@ public class xmlParser {
 
         boolean start = true;
         boolean calendar = false;
+        boolean category = false;
         String startyear = "", startmonth = "", startday = "", endyear = "", endmonth = "", endday = "";
         String startHour = "", startMin = "", endHour = "", endMin = "";
 
@@ -78,6 +79,9 @@ public class xmlParser {
                         }
                         if(tagname.equalsIgnoreCase(KEY_CALENDAR)){
                             calendar = true;
+                        }
+                        if(tagname.equalsIgnoreCase(KEY_CATEGORY)){
+                            category = true;
                         }
                         break;
 
@@ -158,6 +162,14 @@ public class xmlParser {
                         }
                         else if(tagname.equalsIgnoreCase(KEY_CALENDAR)){
                             calendar = false;
+                        }
+                        else if(tagname.equalsIgnoreCase(KEY_CATEGORY)){
+                            category = false;
+                        }
+                        else if(tagname.equalsIgnoreCase(KEY_VALUE)){
+                            if(category){
+                                curEvent.addCategory(curText);
+                            }
                         }
                         break;
 

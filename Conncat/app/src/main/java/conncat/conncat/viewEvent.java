@@ -17,7 +17,7 @@ import java.io.IOException;
 
 public class viewEvent extends AppCompatActivity {
     private EventData eventData;
-    private TextView title, eventDate, eventTime, eventCategories, description;
+    private TextView title, eventDate, eventTime, eventCategories, location, description;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +32,7 @@ public class viewEvent extends AppCompatActivity {
         eventDate = (TextView) findViewById(R.id.eventDate);
         eventTime = (TextView) findViewById(R.id.eventTime);
         eventCategories = (TextView) findViewById(R.id.eventCategories);
+        location = (TextView) findViewById(R.id.eventLocation);
         description = (TextView) findViewById(R.id.eventDescription);
 
         eventData = new EventData();
@@ -63,6 +64,7 @@ public class viewEvent extends AppCompatActivity {
             cat += eventData.categories.get(i) + ", ";
         }
         eventCategories.setText(cat);
+        location.setText(eventData.getAddress());
         description.setText(eventData.getDescription());
 
     }
