@@ -10,4 +10,7 @@
     </string>
     <string name="title_activity_edit_event">editEvent</string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_map_view">MapView</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_map_tab_view">MapTabView</string>
 </resources>

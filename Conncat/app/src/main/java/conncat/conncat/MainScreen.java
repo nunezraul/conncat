@@ -122,7 +122,7 @@ public class MainScreen extends AppCompatActivity
 
         } else if (id == R.id.action_map){
             final Context context = this;
-            Intent intent = new Intent(context, MapsActivity.class);
+            Intent intent = new Intent(context, MapTabView.class);
             startActivity(intent);
         }
 
