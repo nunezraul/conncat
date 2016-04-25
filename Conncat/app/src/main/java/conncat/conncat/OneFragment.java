@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -14,11 +16,15 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -126,6 +132,24 @@ public class OneFragment extends Fragment{
         protected void onPostExecute(String result) {
 
             List<EventData> events = xmlParser.getEvents(new ByteArrayInputStream(result.getBytes()));
+
+            Geocoder geocoder = new Geocoder(getContext());
+            String ucmerced = " merced, ca";
+            for(int i = 0; i < events.size(); i++){
+                try{
+                    //Log.v("Event Address", events.get(i).getAddress() + ucmerced);
+                    List<Address> e = geocoder.getFromLocationName(events.get(i).getAddress() + ucmerced, 5);
+                    if(e.size() != 0) {
+                        Address address = e.get(0);
+                        //LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                        events.get(i).setlongLat(address.getLongitude() ,address.getLatitude());
+                    }
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
+
+
             EventDBHelper db = new EventDBHelper(mContex);
             try {
                 db.createDataBase();

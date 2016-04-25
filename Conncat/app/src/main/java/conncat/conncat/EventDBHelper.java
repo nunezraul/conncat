@@ -153,6 +153,8 @@ public class EventDBHelper extends SQLiteOpenHelper {
             values.put(KEY_STIME, event.startTime);
             values.put(KEY_ETIME, event.endTime);
             values.put(KEY_ADDRESS, event.getAddress());
+            values.put(KEY_LONGITUDE, event.getLongitude());
+            values.put(KEY_LATITUDE, event.getLatitude());
             values.put(KEY_DESCRIPTION, event.getDescription());
             values.put(KEY_SOURCE, event.getSource());
             long rowid = conncat.insert(KEY_EVENTS, null, values);
@@ -181,6 +183,7 @@ public class EventDBHelper extends SQLiteOpenHelper {
                 eventData.setStartTime(cursor.getString(cursor.getColumnIndex(KEY_STIME)));
                 eventData.setEndTime(cursor.getString(cursor.getColumnIndex(KEY_ETIME)));
                 eventData.setAddress(cursor.getString(cursor.getColumnIndex(KEY_ADDRESS)));
+                eventData.setlongLat(cursor.getDouble(cursor.getColumnIndex(KEY_LONGITUDE)), cursor.getDouble(cursor.getColumnIndex(KEY_LATITUDE)));
                 eventData.setDescription(cursor.getString(cursor.getColumnIndex(KEY_DESCRIPTION)));
                 eventData.setSource(cursor.getString(cursor.getColumnIndex(KEY_SOURCE)));
                 eventData.setRowid(cursor.getLong(cursor.getColumnIndex(KEY_ROWID)));
@@ -206,7 +209,7 @@ public class EventDBHelper extends SQLiteOpenHelper {
 
 
         String rowid = Objects.toString(event.getRowid(), null);
-        Log.d("DATABSE", "UPDATING EVENT " + rowid + " and shit");
+        Log.d("DATABASE", "UPDATING EVENT " + rowid + " and shit cat: " + event.categories.size());
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, event.getName());
         values.put(KEY_HOST, event.getHost());
@@ -215,17 +218,19 @@ public class EventDBHelper extends SQLiteOpenHelper {
         values.put(KEY_STIME, event.startTime);
         values.put(KEY_ETIME, event.endTime);
         values.put(KEY_ADDRESS, event.getAddress());
+        values.put(KEY_LATITUDE, event.getLatitude());
+        values.put(KEY_LONGITUDE, event.getLongitude());
         values.put(KEY_DESCRIPTION, event.getDescription());
         values.put(KEY_SOURCE, event.getSource());
         conncat.update(KEY_EVENTS, values, "_id = " + rowid, null);
 
-        conncat.delete(KEY_CATEGORIES, rowid, null);
+        conncat.delete(KEY_CATEGORIES, "_id = " + rowid, null);
         if(!event.categories.isEmpty()){
             for(int i = 0; i < event.categories.size(); i++){
                 ContentValues cat = new ContentValues();
                 cat.put(KEY_ROWID, rowid);
                 cat.put(KEY_CATEGORY, event.categories.get(i));
-                conncat.update(KEY_CATEGORIES,cat, "_id=" + rowid, null);
+                conncat.insert(KEY_CATEGORIES, null, cat);
             }
         }
     }
@@ -243,15 +248,20 @@ public class EventDBHelper extends SQLiteOpenHelper {
             eventData.setStartTime(cursor.getString(cursor.getColumnIndex(KEY_STIME)));
             eventData.setEndTime(cursor.getString(cursor.getColumnIndex(KEY_ETIME)));
             eventData.setAddress(cursor.getString(cursor.getColumnIndex(KEY_ADDRESS)));
+            eventData.setlongLat(cursor.getDouble(cursor.getColumnIndex(KEY_LONGITUDE)), cursor.getDouble(cursor.getColumnIndex(KEY_LATITUDE)));
             eventData.setDescription(cursor.getString(cursor.getColumnIndex(KEY_DESCRIPTION)));
             eventData.setSource(cursor.getString(cursor.getColumnIndex(KEY_SOURCE)));
             eventData.setRowid(cursor.getLong(cursor.getColumnIndex(KEY_ROWID)));
 
             String getCat = "SELECT * FROM Categories WHERE _id = " + cursor.getString(cursor.getColumnIndex(KEY_ROWID)) + ";";
             Cursor cat = conncat.rawQuery(getCat, null);
+            int i = 0;
+            //Log.v("DATABASE", "Categories: " +cat.getColumnCount() );
             if(cat.moveToFirst()){
                 do{
                     eventData.addCategory(cat.getString(cat.getColumnIndex(KEY_CATEGORY)));
+                    Log.v("DATABASE", "GETTING EVENT " + eventData.getRowid() + " and shit cat: " + eventData.categories.get(i));
+                    i++;
                 }while(cat.moveToNext());
             }
         }

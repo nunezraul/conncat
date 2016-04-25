@@ -2,6 +2,8 @@ package conncat.conncat;
 
 import android.app.DialogFragment;
 import android.database.SQLException;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,6 +17,7 @@ import android.widget.TimePicker;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
 
 public class editEvent extends AppCompatActivity {
@@ -136,6 +139,16 @@ public class editEvent extends AppCompatActivity {
         if (!title.getText().toString().isEmpty() && !address.getText().toString().isEmpty() && !start_date.getText().toString().isEmpty() && !start_time.getText().toString().isEmpty() && !end_date.getText().toString().isEmpty() && !end_time.getText().toString().isEmpty() && !host.getText().toString().isEmpty() && !description.getText().toString().isEmpty()) {
             eventData.setName(title.getText().toString());
             eventData.setAddress(address.getText().toString());
+            Geocoder geocoder = new Geocoder(this);
+            try{
+                List<Address> e = geocoder.getFromLocationName(address.getText().toString(), 5);
+                if(e.size() != 0) {
+                    Address address = e.get(0);
+                    eventData.setlongLat(address.getLongitude() ,address.getLatitude());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             eventData.setStartDate(start_date.getText().toString());
             eventData.setStartTime(start_time.getText().toString());
             eventData.setEndDate(end_date.getText().toString());
@@ -144,7 +157,7 @@ public class editEvent extends AppCompatActivity {
             eventData.setDescription(description.getText().toString());
             eventData.setSource("USER");
             String cat = categories.getText().toString();
-            String[] categories = cat.split("\\W+");
+            String[] categories = cat.trim().split("\\s*,\\s*");
             for(String ss: categories){
                 eventData.addCategory(ss);
             }

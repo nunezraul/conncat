@@ -1,5 +1,7 @@
 package conncat.conncat;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,8 +11,8 @@ import java.util.List;
 public class EventData {
     String name;
     String host;
-    int longitude;
-    int latitude;
+    double longitude;
+    double latitude;
     String startDate;
     String endDate;
     String startTime;
@@ -42,7 +44,7 @@ public class EventData {
      * @param longitude the longitude of the event
      * @param latitude the latitude of the event
      */
-    public void setlongLat(int longitude, int latitude){
+    public void setlongLat(double longitude, double latitude){
         this.longitude = longitude;
         this.latitude = latitude;
     }
@@ -163,7 +165,7 @@ public class EventData {
      * Returns the longitude of the event
      * @return the longitude of the event
      */
-    public int getLongitude(){
+    public double getLongitude(){
         return  longitude;
     }
 
@@ -171,9 +173,11 @@ public class EventData {
      * returns the latitude of the event location
      * @return the latitude of the event
      */
-    public int getLatitude(){
+    public double getLatitude(){
         return latitude;
     }
+
+    public LatLng getLatLng(){return new LatLng(latitude, longitude);}
 
     /**
      * returns the start date of the events in utc format

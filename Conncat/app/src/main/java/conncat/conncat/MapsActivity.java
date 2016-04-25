@@ -1,16 +1,21 @@
 package conncat.conncat;
 
+import android.content.Intent;
+import android.database.SQLException;
+import android.location.Geocoder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import android.location.Address;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -18,12 +23,18 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
+import java.util.List;
 
 public class MapsActivity extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private MapView mapView;
+
+    private List<EventData> events;
 
     View view;
 
@@ -55,6 +66,20 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback {
         // Inflate the layout for this fragment, sets the listView declared in the layout file, calls the bindlistView()
         view = inflater.inflate(R.layout.activity_maps, container, false);
 
+        EventDBHelper db = new EventDBHelper(getContext());
+        try {
+            db.createDataBase();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try{
+            db.openDataBase();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        events = db.getAllEvents();
+        db.close();
 
         mapView = (MapView) view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
@@ -91,6 +116,14 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback {
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        Geocoder geocoder = new Geocoder(getContext());
+        String ucmerced = " merced, ca";
+
+        for(int i = 0; i < events.size(); i++){
+            mMap.addMarker(new MarkerOptions().position(events.get(i).getLatLng()).title(events.get(i).getName()));
+        }
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.3664672, -120.4268787), 13.f));
+
     }
 
     @Override
