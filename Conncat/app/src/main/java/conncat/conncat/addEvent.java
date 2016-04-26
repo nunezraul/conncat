@@ -30,7 +30,7 @@ public class addEvent extends AppCompatActivity{
     private DatePicker datePicker;
     private Calendar calendar;
     private EditText title, address, start_date, end_date, start_time, end_time, host, description, categories;
-    private int year, month, day, hour, min;
+    private int year, month, day, hour, min, dayOfWeek;
 
     EventData eventData;
 
@@ -63,6 +63,7 @@ public class addEvent extends AppCompatActivity{
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
+        dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
 
         eventData = new EventData();
 
