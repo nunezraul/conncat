@@ -142,7 +142,7 @@ public class EventDBHelper extends SQLiteOpenHelper {
             return;
 
         String sql = "SELECT * FROM Events WHERE " +
-                KEY_NAME + " LIKE '%" + event.getName() + "%';";
+                KEY_NAME + " LIKE " + DatabaseUtils.sqlEscapeString("%" + event.getName() + "%") + ";";
         Cursor cursor = conncat.rawQuery(sql, null);
         if(cursor.getCount() <= 0){
             ContentValues values = new ContentValues();

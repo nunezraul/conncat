@@ -21,7 +21,7 @@ public class xmlParser {
     static final String KEY_YEAR = "fourdigityear";
     static final String KEY_MONTH = "twodigitmonth";
     static final String KEY_DAY = "twodigitday";
-    static final String KEY_HOUR = "twodigithour";
+    static final String KEY_HOUR = "twodigithour24";
     static final String KEY_MIN = "twodigitminute";
     static final String KEY_SUMMARY = "summary";
     static final String KEY_LINK = "link";

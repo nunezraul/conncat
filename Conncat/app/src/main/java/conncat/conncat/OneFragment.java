@@ -53,6 +53,7 @@ public class OneFragment extends Fragment{
         // Inflate the layout for this fragment, sets the listView declared in the layout file, calls the bindlistView()
         view = inflater.inflate(R.layout.fragment_one, container, false);
         listView = (ListView) view.findViewById(R.id.eventList);
+        setRetainInstance(true);
         bindlistview();
         return view;
 
@@ -91,13 +92,14 @@ public class OneFragment extends Fragment{
      * and display the list of events
      */
     public void bindlistview(){
-        String stringUrlXML = "http://events.ucmerced.edu:7070/feeder/main/eventsFeed.do?f=y&sort=dtstart.utc:asc&fexpr=(categories.href!=%22/public/.bedework/categories/sys/Ongoing%22)%20and%20(entity_type=%22event%22%7Centity_type=%22todo%22)&skinName=list-xml&count=200";
-
+        String[] eventURLs = {"http://events.ucmerced.edu:7070/feeder/main/eventsFeed.do?f=y&sort=dtstart.utc:asc&fexpr=(categories.href!=%22/public/.bedework/categories/sys/Ongoing%22)%20and%20(entity_type=%22event%22%7Centity_type=%22todo%22)&skinName=list-xml&count=200", "https://drive.google.com/uc?export=download&id=0BwCHu0WyYCBkc21NblUtR1Z1MGM"};
         ConnectivityManager connMgr = (ConnectivityManager)
                 getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
-            new Downloadlist(getActivity(), listView).execute(stringUrlXML);
+            //new Downloadlist(getActivity(), listView).execute(happeningsURL);
+            //new Downloadlist(getActivity(), listView).execute(stringUrlXML);
+            new Downloadlist(getActivity(), listView).execute(eventURLs);
         } else {
             //textView.setText("No network connection available.");
         }
@@ -121,7 +123,50 @@ public class OneFragment extends Fragment{
             // params comes from the execute() call: params[0] is the url.
             try {
                 downloadXML dl = new downloadXML();
-                return dl.downloadXML(urls[0]);
+                String result = dl.downloadXML(urls);
+
+                List<EventData> events = xmlParser.getEvents(new ByteArrayInputStream(result.getBytes()));
+                Geocoder geocoder = new Geocoder(getContext());
+
+                String ucmerced = " merced, ca";
+                for (int i = 0; i < events.size(); i++) {
+                    try {
+                        //Log.v("Event: ", events.get(i).getAddress() + ucmerced);
+                        List<Address> e = geocoder.getFromLocationName(events.get(i).getAddress() + ucmerced, 5);
+                        if (e.size() != 0) {
+                            Address address = e.get(0);
+                            events.get(i).setlongLat(address.getLongitude(), address.getLatitude());
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+                EventDBHelper db = new EventDBHelper(mContex);
+                try {
+                    db.createDataBase();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    db.openDataBase();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < events.size(); i++) {
+                    Log.v("Happenings1", events.get(i).getName() + " Date: " + events.get(i).getStartDate());
+                    Log.v("Happenings2", events.get(i).getName() + " added to DB");
+                    if (events.get(i).getStartDate() != null) {
+                        if (events.get(i).getStartDate().contains("N/A"))
+                            continue;
+                    }
+                    db.add(events.get(i));
+                }
+                db.close();
+
+                return "success";
+
             } catch (IOException e) {
                 String error = "Unable to retrieve web page. URL may be invalid.";
                 return error;
@@ -131,24 +176,6 @@ public class OneFragment extends Fragment{
         @Override
         protected void onPostExecute(String result) {
 
-            List<EventData> events = xmlParser.getEvents(new ByteArrayInputStream(result.getBytes()));
-
-            Geocoder geocoder = new Geocoder(getContext());
-            String ucmerced = " merced, ca";
-            for(int i = 0; i < events.size(); i++){
-                try{
-                    //Log.v("Event Address", events.get(i).getAddress() + ucmerced);
-                    List<Address> e = geocoder.getFromLocationName(events.get(i).getAddress() + ucmerced, 5);
-                    if(e.size() != 0) {
-                        Address address = e.get(0);
-                        //LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                        events.get(i).setlongLat(address.getLongitude() ,address.getLatitude());
-                    }
-                }catch (IOException e){
-                    e.printStackTrace();
-                }
-            }
-
 
             EventDBHelper db = new EventDBHelper(mContex);
             try {
@@ -156,23 +183,18 @@ public class OneFragment extends Fragment{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            try{
+            try {
                 db.openDataBase();
-            }catch (SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
-            for(int i = 0; i < events.size(); i++){
-                db.add(events.get(i));
-            }
-
+            //textView.setText(result);
+            //webView.loadData(result, "text/html", "utf-8");
             List<EventData> ev = db.getAllEvents();
             db.close();
             eventAdapter = new EventAdapter(getActivity(), -1, ev);
 
             listView.setAdapter(eventAdapter);
-
-            //textView.setText(result);
-            //webView.loadData(result, "text/html", "utf-8");
         }
 
 
