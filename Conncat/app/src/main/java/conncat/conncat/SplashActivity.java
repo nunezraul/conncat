@@ -7,7 +7,7 @@ import android.os.Handler;
 
 public class SplashActivity extends Activity {
     // Splash screen timer
-    private static int SPLASH_TIME_OUT = 600;
+    private static int SPLASH_TIME_OUT = 800;
 
     /*
     starts splash screen when the app is launched
