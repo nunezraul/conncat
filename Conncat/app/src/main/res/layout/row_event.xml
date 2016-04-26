@@ -11,31 +11,36 @@
         android:layout_height="wrap_content"
         card_view:cardElevation="5dp"
         android:layout_gravity="center"
-        android:layout_margin="6dp"
         card_view:cardCornerRadius="2dp"
         card_view:contentPadding="3dp"
-        >
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="6dp">
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+            <!-- Image-->
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="150dp"
+                android:id="@+id/imageView"
+                android:layout_toEndOf="@+id/time"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/ucm" />
+
             <!-- Title-->
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Large Text"
                 android:id="@+id/title"
-                android:textColor="#000000"/>
-            <!-- start date -->
-           <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/title"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Small Text"
-                android:id="@+id/date"
-                android:textColor="#000000"/>
-            <!-- end date -->
+                android:textColor="#000000"
+                android:layout_marginLeft="2dp"
+                android:layout_below="@+id/time"
+                android:layout_marginTop="-2dp"
+                android:layout_toEndOf="@+id/year"/>
+            <!-- start time -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -43,7 +48,78 @@
                 android:text="Small Text"
                 android:id="@+id/time"
                 android:textColor="#000000"
-                android:layout_below="@+id/date" />
+                android:paddingTop="3dp"
+                android:paddingBottom="0dp"
+                android:layout_marginLeft="2dp"
+                android:layout_toEndOf="@+id/month"
+                android:layout_below="@+id/imageView" />
+
+            <!-- month -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/month"
+                android:layout_alignParentStart="true"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="MON"
+                android:layout_alignTop="@+id/time"
+                android:gravity="center_horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_alignEnd="@+id/day"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
+
+            <!-- day -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/day"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="00"
+                android:gravity="center_vertical|center_horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_below="@+id/time"
+                android:layout_alignParentStart="true"
+                android:layout_alignBottom="@+id/title"
+                android:layout_toStartOf="@+id/title"
+                android:layout_alignEnd="@+id/year"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
+
+            <!-- year -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/year"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="0000"
+                android:gravity="center_horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_alignBottom="@+id/loc"
+                android:layout_alignParentStart="true"
+                android:paddingTop="0dp"
+                android:layout_below="@+id/day"
+                android:paddingBottom="0dp"
+                android:layout_marginTop="-5dp"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
+
+            <!-- location -->
+            <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                 android:text="Small Text"
+                 android:id="@+id/loc"
+                android:textColor="#000000"
+                android:layout_marginLeft="3dp"
+                android:layout_below="@+id/day"
+                android:layout_toEndOf="@+id/day"
+                android:layout_marginTop="1dp" />
+
             <!-- Description-->
             <!--<TextView
                 android:layout_width="wrap_content"
