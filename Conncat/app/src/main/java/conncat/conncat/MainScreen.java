@@ -26,9 +26,10 @@ import java.util.List;
 
 public class MainScreen extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
-    private Toolbar toolbar;
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
+    NavigationView navigationView = null;
+    private Toolbar toolbar = null;
+   // private TabLayout tabLayout;
+   // private ViewPager viewPager;
     private FloatingActionButton fab;
 
 
@@ -45,6 +46,11 @@ public class MainScreen extends AppCompatActivity
         {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
+        //Initial HomeScreen Fragment
+        HomeScreen fragment = new HomeScreen();
+        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container,fragment);
+        fragmentTransaction.commit();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -57,14 +63,14 @@ public class MainScreen extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
+      /*  viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setupWithViewPager(viewPager);*/
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -84,14 +90,14 @@ public class MainScreen extends AppCompatActivity
 
     @param  ViewPager   helps supply and manage lifecycle of each page
      */
-    private void setupViewPager(ViewPager viewPager) {
+   /* private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new OneFragment(), "All");
         adapter.addFragment(new TwoFragment(), "On Campus");
         adapter.addFragment(new ThreeFragment(), "Off Campus");
         viewPager.setAdapter(adapter);
     }
-
+*/
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -136,14 +142,14 @@ public class MainScreen extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            final Context context = this;
-            Intent intent = new Intent(context, MainScreen.class);
-            startActivity(intent);
+            HomeScreen fragment = new HomeScreen();
+            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container,fragment);
+            fragmentTransaction.commit();
 
         } else if (id == R.id.nav_categories) {
-            final Context context = this;
-            Intent intent = new Intent(context, catActivity.class);
-            startActivity(intent);
+
+
 
         } else if (id == R.id.nav_slideshow) {
 
@@ -160,13 +166,13 @@ public class MainScreen extends AppCompatActivity
         return true;
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+   /*class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
-        }
+        }*/
 
         /*
         This function returns the item at a certain position
@@ -174,30 +180,30 @@ public class MainScreen extends AppCompatActivity
         @param  position    position you want more information about
         @return fragment
          */
-        @Override
+     /*   @Override
         public Fragment getItem(int position) {
             return mFragmentList.get(position);
-        }
+        }*/
 
         /*
         This function returns how many fragments are in the tabLayout
 
         @return size of fragment list
          */
-        @Override
+     /*   @Override
         public int getCount() {
             return mFragmentList.size();
-        }
+        }*/
 
         /*
         this function adds fragments to the tabLayout
 
         @param  fragment, title     specific fragment and name you want assigned to the tab
          */
-        public void addFragment(Fragment fragment, String title) {
+        /*public void addFragment(Fragment fragment, String title) {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
-        }
+        }*/
 
         /*
         This function returns the page title at a certain position of the tabLayout
@@ -205,10 +211,10 @@ public class MainScreen extends AppCompatActivity
         @param position you want more information about
         @return get character sequence at that position
          */
-        @Override
+       /* @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
-    }
+    }*/
 }
 
