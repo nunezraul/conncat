@@ -1,8 +1,16 @@
 package conncat.conncat;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.SQLException;
+import android.location.Address;
+import android.location.Geocoder;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.internal.NavigationMenu;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -15,10 +23,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
+import android.widget.Toast;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,17 +73,12 @@ public class MainScreen extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-      /*  viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
-
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);*/
+        navigationView.getMenu().getItem(0).setChecked(true);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -80,24 +88,11 @@ public class MainScreen extends AppCompatActivity
                 startActivity(i);
             }
         });
-
+        updateDB();
 
 
     }
 
-    /*
-    This function adds fragments to the tabLayout and labels them accordingly.
-
-    @param  ViewPager   helps supply and manage lifecycle of each page
-     */
-   /* private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new OneFragment(), "All");
-        adapter.addFragment(new TwoFragment(), "On Campus");
-        adapter.addFragment(new ThreeFragment(), "Off Campus");
-        viewPager.setAdapter(adapter);
-    }
-*/
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -142,10 +137,12 @@ public class MainScreen extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            HomeScreen fragment = new HomeScreen();
-            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container,fragment);
-            fragmentTransaction.commit();
+            if(!navigationView.getMenu().getItem(0).isChecked()) {
+                HomeScreen fragment = new HomeScreen();
+                android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.commit();
+            }
 
         } else if (id == R.id.nav_categories) {
 
@@ -166,55 +163,90 @@ public class MainScreen extends AppCompatActivity
         return true;
     }
 
-   /*class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }*/
-
-        /*
-        This function returns the item at a certain position
-
-        @param  position    position you want more information about
-        @return fragment
-         */
-     /*   @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }*/
-
-        /*
-        This function returns how many fragments are in the tabLayout
-
-        @return size of fragment list
-         */
-     /*   @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }*/
-
-        /*
-        this function adds fragments to the tabLayout
-
-        @param  fragment, title     specific fragment and name you want assigned to the tab
-         */
-        /*public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }*/
-
-        /*
-        This function returns the page title at a certain position of the tabLayout
-
-        @param position you want more information about
-        @return get character sequence at that position
-         */
-       /* @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
+    public void updateDB(){
+        String[] eventURLs = {"http://events.ucmerced.edu:7070/feeder/main/eventsFeed.do?f=y&sort=dtstart.utc:asc&fexpr=(categories.href!=%22/public/.bedework/categories/sys/Ongoing%22)%20and%20(entity_type=%22event%22%7Centity_type=%22todo%22)&skinName=list-xml&count=200", "https://drive.google.com/uc?export=download&id=0BwCHu0WyYCBkc21NblUtR1Z1MGM"};
+        ConnectivityManager connMgr = (ConnectivityManager)
+                this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            new Downloadlist(this).execute(eventURLs);
+        } else {
+            Toast.makeText(this, "Connection Error", Toast.LENGTH_SHORT).show();
         }
-    }*/
+    }
+
+    class Downloadlist extends AsyncTask<String, Void, String> {
+
+        Activity mContex;
+        String error = "Adding events to DB failed";
+        public  Downloadlist(Activity contex)
+        {
+            this.mContex=contex;
+        }
+
+        @Override
+        protected String doInBackground(String... urls) {
+
+            // params comes from the execute() call: params[0] is the url.
+            try {
+                downloadXML dl = new downloadXML();
+                String result = dl.downloadXML(urls);
+
+                List<EventData> events = xmlParser.getEvents(new ByteArrayInputStream(result.getBytes()));
+                Geocoder geocoder = new Geocoder(mContex);
+
+                String ucmerced = " merced, ca";
+                for (int i = 0; i < events.size(); i++) {
+                    try {
+                        //Log.v("Event: ", events.get(i).getAddress() + ucmerced);
+                        List<Address> e = geocoder.getFromLocationName(events.get(i).getAddress() + ucmerced, 5);
+                        if (e.size() != 0) {
+                            Address address = e.get(0);
+                            events.get(i).setlongLat(address.getLongitude(), address.getLatitude());
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+                EventDBHelper db = new EventDBHelper(mContex);
+                try {
+                    db.createDataBase();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    db.openDataBase();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < events.size(); i++) {
+                    Log.v("Happenings1", events.get(i).getName() + " Date: " + events.get(i).getStartDate());
+                    Log.v("Happenings2", events.get(i).getName() + " added to DB");
+                    if (events.get(i).getStartDate() != null) {
+                        if (events.get(i).getStartDate().contains("N/A"))
+                            continue;
+                    }
+                    db.add(events.get(i));
+                }
+                db.close();
+
+                return "success";
+
+            } catch (IOException e) {
+                return error;
+            }
+        }
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            if(result.equals(error))
+                Toast.makeText(mContex, error, Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
 }
 

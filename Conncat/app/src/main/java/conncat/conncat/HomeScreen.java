@@ -39,12 +39,13 @@ public class HomeScreen extends Fragment {
 
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+        //setRetainInstance(true);
 
         return view;
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getFragmentManager());
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
         adapter.addFragment(new OneFragment(), "All");
         adapter.addFragment(new TwoFragment(), "On Campus");
         adapter.addFragment(new ThreeFragment(), "Off Campus");
