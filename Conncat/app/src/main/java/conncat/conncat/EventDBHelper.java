@@ -312,7 +312,7 @@ public class EventDBHelper extends SQLiteOpenHelper {
 
     public List<String> getCategories(){
         List<String> categories = new ArrayList<>();
-        Cursor cursor = conncat.query(true, KEY_CATEGORIES, new String[] {KEY_CATEGORY}, null, null, KEY_CATEGORY, null, KEY_CATEGORY + " DESC", null);
+        Cursor cursor = conncat.query(true, KEY_CATEGORIES, new String[] {KEY_CATEGORY}, null, null, KEY_CATEGORY, null, KEY_CATEGORY + " ASC", null);
         if(cursor.moveToFirst()) {
             do{
                 categories.add(cursor.getString(cursor.getColumnIndex(KEY_CATEGORY)));
