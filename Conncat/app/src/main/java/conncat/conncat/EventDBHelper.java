@@ -312,13 +312,45 @@ public class EventDBHelper extends SQLiteOpenHelper {
 
     public List<String> getCategories(){
         List<String> categories = new ArrayList<>();
-        Cursor cursor = conncat.query(true, KEY_CATEGORIES, new String[] {KEY_CATEGORY}, null, null, KEY_CATEGORY, null, KEY_CATEGORY + " DESC", null);
+        Cursor cursor = conncat.query(true, KEY_CATEGORIES, new String[] {KEY_CATEGORY}, null, null, KEY_CATEGORY, null, KEY_CATEGORY + " ASC", null);
         if(cursor.moveToFirst()) {
             do{
                 categories.add(cursor.getString(cursor.getColumnIndex(KEY_CATEGORY)));
             }while(cursor.moveToNext());
         }
         return categories;
+    }
+
+    public List<EventData> getEventsByCategory(String category){
+        List<EventData> events = new ArrayList<EventData>();
+        Cursor cursor = conncat.rawQuery("SELECT * FROM EVENTS WHERE "+ KEY_ROWID + " = (SELECT " + KEY_ROWID + " FROM " + KEY_CATEGORIES + " WHERE " + KEY_CATEGORY + " LIKE " + DatabaseUtils.sqlEscapeString("%" + category + "%") + ") ORDER BY date(start_date);", null);
+        //Cursor cursor = conncat.query(KEY_EVENTS, null, KEY_CATEGORY + " LIKE ?", new String[]{DatabaseUtils.sqlEscapeString("%" + category + "%")}, null, null, KEY_SDATE + " ASC");
+        if(cursor.moveToFirst()) {
+            do{
+                EventData eventData = new EventData();
+                eventData.setName(cursor.getString(cursor.getColumnIndex(KEY_NAME)));
+                eventData.setHost(cursor.getString(cursor.getColumnIndex(KEY_HOST)));
+                eventData.setStartDate(cursor.getString(cursor.getColumnIndex(KEY_SDATE)));
+                eventData.setEndDate(cursor.getString(cursor.getColumnIndex(KEY_EDATE)));
+                eventData.setStartTime(cursor.getString(cursor.getColumnIndex(KEY_STIME)));
+                eventData.setEndTime(cursor.getString(cursor.getColumnIndex(KEY_ETIME)));
+                eventData.setAddress(cursor.getString(cursor.getColumnIndex(KEY_ADDRESS)));
+                eventData.setlongLat(cursor.getDouble(cursor.getColumnIndex(KEY_LONGITUDE)), cursor.getDouble(cursor.getColumnIndex(KEY_LATITUDE)));
+                eventData.setDescription(cursor.getString(cursor.getColumnIndex(KEY_DESCRIPTION)));
+                eventData.setSource(cursor.getString(cursor.getColumnIndex(KEY_SOURCE)));
+                eventData.setRowid(cursor.getLong(cursor.getColumnIndex(KEY_ROWID)));
+
+                String getCat = "SELECT * FROM Categories WHERE _id = " + cursor.getString(cursor.getColumnIndex(KEY_ROWID)) + ";";
+                Cursor cat = conncat.rawQuery(getCat, null);
+                if(cat.moveToFirst()){
+                    do{
+                        eventData.addCategory(cat.getString(cat.getColumnIndex(KEY_CATEGORY)));
+                    }while(cat.moveToNext());
+                }
+                events.add(eventData);
+            }while(cursor.moveToNext());
+        }
+        return events;
     }
 
     @Override
