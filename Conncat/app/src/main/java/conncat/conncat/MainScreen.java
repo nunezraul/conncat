@@ -230,6 +230,10 @@ public class MainScreen extends AppCompatActivity
                     }
                     db.add(events.get(i));
                 }
+                /*List<String> c = db.getCategories();
+                for(String s:c){
+                    Log.v("Categories", s);
+                }*/
                 db.close();
 
                 return "success";

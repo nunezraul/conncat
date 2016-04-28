@@ -9,6 +9,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.location.Location;
 import android.util.Log;
 
 import java.io.FileOutputStream;
@@ -203,6 +204,46 @@ public class EventDBHelper extends SQLiteOpenHelper {
 
     }
 
+    public List<EventData> getOnCampusEvents(){
+        String sql = "SELECT * FROM Events WHERE (latitude <= 37.369796 AND latitude >= 37.361075) AND (longitude <= 120.432416 AND longitude >= 120.416317) ORDER BY date(start_date);";
+        Cursor cursor = conncat.rawQuery(sql, null);
+        List<EventData> ed = new ArrayList<EventData>();
+        Location ucmerced = new Location("UC Merced");
+        ucmerced.setLatitude(37.3637); ucmerced.setLongitude(120.4311);
+        if(cursor.moveToFirst()){
+            do{
+                Location eve = new Location("Event");
+                eve.setLatitude(cursor.getDouble(cursor.getColumnIndex(KEY_LATITUDE)));eve.setLongitude(cursor.getDouble(cursor.getColumnIndex(KEY_LONGITUDE)));
+                Log.d("Database Get on campus", "Latitude: " + cursor.getDouble(cursor.getColumnIndex(KEY_LATITUDE)) + " Longitude: " + cursor.getDouble(cursor.getColumnIndex(KEY_LONGITUDE)));
+                if(eve.distanceTo(ucmerced) < 3218.69) {
+                    EventData eventData = new EventData();
+                    eventData.setName(cursor.getString(cursor.getColumnIndex(KEY_NAME)));
+                    eventData.setHost(cursor.getString(cursor.getColumnIndex(KEY_HOST)));
+                    eventData.setStartDate(cursor.getString(cursor.getColumnIndex(KEY_SDATE)));
+                    eventData.setEndDate(cursor.getString(cursor.getColumnIndex(KEY_EDATE)));
+                    eventData.setStartTime(cursor.getString(cursor.getColumnIndex(KEY_STIME)));
+                    eventData.setEndTime(cursor.getString(cursor.getColumnIndex(KEY_ETIME)));
+                    eventData.setAddress(cursor.getString(cursor.getColumnIndex(KEY_ADDRESS)));
+                    eventData.setlongLat(cursor.getDouble(cursor.getColumnIndex(KEY_LONGITUDE)), cursor.getDouble(cursor.getColumnIndex(KEY_LATITUDE)));
+                    eventData.setDescription(cursor.getString(cursor.getColumnIndex(KEY_DESCRIPTION)));
+                    eventData.setSource(cursor.getString(cursor.getColumnIndex(KEY_SOURCE)));
+                    eventData.setRowid(cursor.getLong(cursor.getColumnIndex(KEY_ROWID)));
+
+                    String getCat = "SELECT * FROM Categories WHERE _id = " + cursor.getString(cursor.getColumnIndex(KEY_ROWID)) + ";";
+                    Cursor cat = conncat.rawQuery(getCat, null);
+                    if (cat.moveToFirst()) {
+                        do {
+                            eventData.addCategory(cat.getString(cat.getColumnIndex(KEY_CATEGORY)));
+                        } while (cat.moveToNext());
+                    }
+                    ed.add(eventData);
+                }
+
+            }while(cursor.moveToNext());
+        }
+        return ed;
+    }
+
     public void updateEvent(EventData event){
         if(event.getName() == null)
             return;
@@ -267,6 +308,17 @@ public class EventDBHelper extends SQLiteOpenHelper {
         }
         return eventData;
 
+    }
+
+    public List<String> getCategories(){
+        List<String> categories = new ArrayList<>();
+        Cursor cursor = conncat.query(true, KEY_CATEGORIES, new String[] {KEY_CATEGORY}, null, null, KEY_CATEGORY, null, KEY_CATEGORY + " DESC", null);
+        if(cursor.moveToFirst()) {
+            do{
+                categories.add(cursor.getString(cursor.getColumnIndex(KEY_CATEGORY)));
+            }while(cursor.moveToNext());
+        }
+        return categories;
     }
 
     @Override
