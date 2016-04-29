@@ -1,6 +1,8 @@
 package conncat.conncat;
 
+import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.database.SQLException;
 import android.location.Address;
 import android.location.Geocoder;
@@ -9,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -158,6 +161,10 @@ public class editEvent extends AppCompatActivity {
             eventData.setSource("USER");
             String cat = categories.getText().toString();
             String[] categories = cat.trim().split("\\s*,\\s*");
+            for(String s: categories){
+                Log.v("Category", s );
+            }
+            eventData.categories.clear();
             for(String ss: categories){
                 eventData.addCategory(ss);
             }
@@ -179,6 +186,9 @@ public class editEvent extends AppCompatActivity {
                 e.printStackTrace();
             }
             db.close();
+
+            Intent returnIntent = new Intent();
+            setResult(Activity.RESULT_OK, returnIntent);
             finish();
         }
     }

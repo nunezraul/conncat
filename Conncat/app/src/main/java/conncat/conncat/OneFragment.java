@@ -79,7 +79,7 @@ public class OneFragment extends Fragment{
         return view;
 
     }
-    @Override
+    /*@Override
     public void onResume(){
         super.onResume();
 
@@ -98,6 +98,8 @@ public class OneFragment extends Fragment{
         eventAdapter = new EventAdapter(getActivity(), -1, ev);
         listView.setAdapter(eventAdapter);
 
-    }
+    }*/
+
+
 
 }

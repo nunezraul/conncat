@@ -27,7 +27,7 @@ import java.util.Objects;
 public class EventDBHelper extends SQLiteOpenHelper {
 
     //The Android's default system path of your application database.
-    private static String DB_PATH = "/data/data/conncat.conncat/databases/";
+    private static String DB_PATH = "";
     private static String DB_NAME = "conncat.db";
 
     private SQLiteDatabase conncat;
@@ -55,6 +55,7 @@ public class EventDBHelper extends SQLiteOpenHelper {
 
         super(context, DB_NAME, null, 1);
         this.context = context;
+        DB_PATH = context.getDatabasePath(DB_NAME).toString();
     }
 
     public void createDataBase() throws IOException {
@@ -64,7 +65,6 @@ public class EventDBHelper extends SQLiteOpenHelper {
         if(dbExist){
             //do nothing - database already exist
         }else{
-
             //By calling this method and empty database will be created into the default system path
             //of your application so we are gonna be able to overwrite that database with our database.
             this.getReadableDatabase();
@@ -85,28 +85,19 @@ public class EventDBHelper extends SQLiteOpenHelper {
     private boolean checkDataBase(){
 
         SQLiteDatabase checkDB = null;
-
         try{
             String myPath = DB_PATH + DB_NAME;
             checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
-
         }catch(SQLiteException e){
-
             //database does't exist yet.
-
         }
-
         if(checkDB != null){
-
             checkDB.close();
-
         }
-
         return checkDB != null ? true : false;
     }
 
     private void copyDataBase() throws IOException{
-
         //Open your local db as the input stream
         InputStream myInput = context.getAssets().open(DB_NAME);
 
@@ -136,6 +127,13 @@ public class EventDBHelper extends SQLiteOpenHelper {
         String myPath = DB_PATH + DB_NAME;
         conncat = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
 
+    }
+
+    @Override
+    public synchronized void close() {
+        if (conncat != null)
+            conncat.close();
+        super.close();
     }
 
     public void add(EventData event){
@@ -168,12 +166,13 @@ public class EventDBHelper extends SQLiteOpenHelper {
                 }
             }
         }
+        cursor.close();
     }
 
     public List<EventData> getAllEvents(){
         String sql = "SELECT * FROM Events ORDER BY date(start_date);";
         Cursor cursor = conncat.rawQuery(sql, null);
-        List<EventData> ed = new ArrayList<EventData>();
+        List<EventData> ed = new ArrayList<>();
         if(cursor.moveToFirst()){
             do{
                 EventData eventData = new EventData();
@@ -196,10 +195,12 @@ public class EventDBHelper extends SQLiteOpenHelper {
                         eventData.addCategory(cat.getString(cat.getColumnIndex(KEY_CATEGORY)));
                     }while(cat.moveToNext());
                 }
+                cat.close();
                 ed.add(eventData);
 
             }while(cursor.moveToNext());
         }
+        cursor.close();
         return ed;
 
     }
@@ -207,7 +208,7 @@ public class EventDBHelper extends SQLiteOpenHelper {
     public List<EventData> getOnCampusEvents(){
         String sql = "SELECT * FROM Events ORDER BY date(start_date);";
         Cursor cursor = conncat.rawQuery(sql, null);
-        List<EventData> ed = new ArrayList<EventData>();
+        List<EventData> ed = new ArrayList<>();
         Location ucmerced = new Location("UC Merced");
         ucmerced.setLatitude(37.3637); ucmerced.setLongitude(-120.4311);
         if(cursor.moveToFirst()){
@@ -236,18 +237,20 @@ public class EventDBHelper extends SQLiteOpenHelper {
                             eventData.addCategory(cat.getString(cat.getColumnIndex(KEY_CATEGORY)));
                         } while (cat.moveToNext());
                     }
+                    cat.close();
                     ed.add(eventData);
                 }
 
             }while(cursor.moveToNext());
         }
+        cursor.close();
         return ed;
     }
 
     public List<EventData> getOffCampusEvents(){
         String sql = "SELECT * FROM Events ORDER BY date(start_date);";
         Cursor cursor = conncat.rawQuery(sql, null);
-        List<EventData> ed = new ArrayList<EventData>();
+        List<EventData> ed = new ArrayList<>();
         Location ucmerced = new Location("UC Merced");
         ucmerced.setLatitude(37.3637); ucmerced.setLongitude(-120.4311);
         if(cursor.moveToFirst()){
@@ -276,11 +279,13 @@ public class EventDBHelper extends SQLiteOpenHelper {
                             eventData.addCategory(cat.getString(cat.getColumnIndex(KEY_CATEGORY)));
                         } while (cat.moveToNext());
                     }
+                    cat.close();
                     ed.add(eventData);
                 }
 
             }while(cursor.moveToNext());
         }
+        cursor.close();
         return ed;
     }
 
@@ -305,7 +310,7 @@ public class EventDBHelper extends SQLiteOpenHelper {
         values.put(KEY_SOURCE, event.getSource());
         conncat.update(KEY_EVENTS, values, "_id = " + rowid, null);
 
-        conncat.delete(KEY_CATEGORIES, "_id = " + rowid, null);
+        conncat.delete(KEY_CATEGORIES, KEY_ROWID + " = " + event.getRowid(), null);
         if(!event.categories.isEmpty()){
             for(int i = 0; i < event.categories.size(); i++){
                 ContentValues cat = new ContentValues();
@@ -345,7 +350,9 @@ public class EventDBHelper extends SQLiteOpenHelper {
                     i++;
                 }while(cat.moveToNext());
             }
+            cat.close();
         }
+        cursor.close();
         return eventData;
 
     }
@@ -358,11 +365,12 @@ public class EventDBHelper extends SQLiteOpenHelper {
                 categories.add(cursor.getString(cursor.getColumnIndex(KEY_CATEGORY)));
             }while(cursor.moveToNext());
         }
+        cursor.close();
         return categories;
     }
 
     public List<EventData> getEventsByCategory(String category){
-        List<EventData> events = new ArrayList<EventData>();
+        List<EventData> events = new ArrayList<>();
         Cursor cursor = conncat.rawQuery("SELECT * FROM EVENTS WHERE "+ KEY_ROWID + " = (SELECT " + KEY_ROWID + " FROM " + KEY_CATEGORIES + " WHERE " + KEY_CATEGORY + " LIKE " + DatabaseUtils.sqlEscapeString("%" + category + "%") + ") ORDER BY date(start_date);", null);
         //Cursor cursor = conncat.query(KEY_EVENTS, null, KEY_CATEGORY + " LIKE ?", new String[]{DatabaseUtils.sqlEscapeString("%" + category + "%")}, null, null, KEY_SDATE + " ASC");
         if(cursor.moveToFirst()) {
@@ -387,9 +395,11 @@ public class EventDBHelper extends SQLiteOpenHelper {
                         eventData.addCategory(cat.getString(cat.getColumnIndex(KEY_CATEGORY)));
                     }while(cat.moveToNext());
                 }
+                cat.close();
                 events.add(eventData);
             }while(cursor.moveToNext());
         }
+        cursor.close();
         return events;
     }
 
