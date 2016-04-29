@@ -48,6 +48,7 @@ public class TwoFragment extends Fragment{
             e.printStackTrace();
         }
         List<EventData> ev = db.getOnCampusEvents();
+        db.close();
         eventAdapter = new EventAdapter(getActivity(), -1, ev);
         listView.setAdapter(eventAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -22,6 +22,9 @@ public class viewEvent extends AppCompatActivity {
     private EventData eventData;
     private TextView title, eventDate, eventTime, eventCategories, location, description;
 
+    static final int EDIT_EVENT = 1;  // The request code
+    static int EVENT_EDITED = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,13 +88,56 @@ public class viewEvent extends AppCompatActivity {
             case R.id.action_edit:
                 Intent intent = new Intent(this, editEvent.class);
                 intent.putExtra("eventID", eventData.getRowid());
-                startActivity(intent);
+                startActivityForResult(intent, EDIT_EVENT);
                 break;
             case android.R.id.home:
                 onBackPressed();
                 return true;
         }
         return true;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == EDIT_EVENT) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                Log.v("Edit Event", "Event was RESULT_OK");
+                EVENT_EDITED = 1;
+                eventData = new EventData();
+                Bundle extras = getIntent().getExtras();
+                if(extras != null) {
+                    long rowid = extras.getLong("eventID");
+                    EventDBHelper db = new EventDBHelper(this);
+                    try {
+                        db.createDataBase();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        db.openDataBase();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    eventData = db.getEvent(rowid);
+                    db.close();
+
+                }
+
+                setTitle(eventData.getName());
+                title.setText(eventData.getName());
+                eventDate.setText(eventData.getStartDate());
+                eventTime.setText(eventData.startTime);
+                String cat = "";
+                for(int i = 0; i < eventData.categories.size(); i++){
+                    cat += eventData.categories.get(i) + ", ";
+                }
+                eventCategories.setText(cat);
+                location.setText(eventData.getAddress());
+                description.setText(eventData.getDescription());
+            }
+        }
     }
 
 
