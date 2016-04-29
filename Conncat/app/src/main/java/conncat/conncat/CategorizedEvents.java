@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.database.SQLException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -18,14 +20,22 @@ public class CategorizedEvents extends AppCompatActivity {
     View view;
     private EventAdapter eventAdapter;
     private ListView listView;
+    private Toolbar toolbar = null;
     ViewGroup parent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categorized_events);
-        view = getLayoutInflater().inflate(R.layout.activity_categorized_events, parent, false);
-        listView = (ListView) view.findViewById(R.id.categorizedEvents);
+
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //view = getLayoutInflater().inflate(R.layout.activity_categorized_events, parent, false);
+        listView = (ListView) findViewById(R.id.categorizedEvents);
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             String category = extras.getString("category");
@@ -40,6 +50,7 @@ public class CategorizedEvents extends AppCompatActivity {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            setTitle(category);
             List<EventData> ev = db.getEventsByCategory(category);
             eventAdapter = new EventAdapter(this, R.layout.row_event, ev);
             listView.setAdapter(eventAdapter);
@@ -48,14 +59,14 @@ public class CategorizedEvents extends AppCompatActivity {
         }
 
 
-        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(view.getContext(), viewEvent.class);
                 intent.putExtra("eventID", eventAdapter.getItem(position).getRowid());
                 startActivity(intent);
             }
-        });*/
+        });
         //setRetainInstance(true);
 
 
@@ -79,6 +90,16 @@ public class CategorizedEvents extends AppCompatActivity {
         eventAdapter = new EventAdapter(this, -1, ev);
         listView.setAdapter(eventAdapter);
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+           case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return true;
     }
 
 }
