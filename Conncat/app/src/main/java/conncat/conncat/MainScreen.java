@@ -203,11 +203,39 @@ public class MainScreen extends AppCompatActivity
                 String ucmerced = " merced, ca";
                 for (int i = 0; i < events.size(); i++) {
                     try {
-                        //Log.v("Event: ", events.get(i).getAddress() + ucmerced);
-                        List<Address> e = geocoder.getFromLocationName(events.get(i).getAddress() + ucmerced, 5);
-                        if (e.size() != 0) {
-                            Address address = e.get(0);
-                            events.get(i).setlongLat(address.getLongitude(), address.getLatitude());
+                        List<Address> e;
+                        if(events.get(i).getAddress() != null) {
+                            Log.v("Event: ", events.get(i).getAddress() + ucmerced);
+                            if (events.get(i).getAddress().contains("SE2"))
+                                e = geocoder.getFromLocationName("Science and Engineering Building 2" + ucmerced, 5);
+                            else if (events.get(i).getAddress().contains("SE1"))
+                                e = geocoder.getFromLocationName("Science and Engineering Building 1" + ucmerced, 5);
+                            else if (events.get(i).getAddress().contains("SSM"))
+                                e = geocoder.getFromLocationName("Social Science and Management building" + ucmerced, 5);
+                            else if (events.get(i).getAddress().contains("SSB"))
+                                e = geocoder.getFromLocationName("Student Services Building" + ucmerced, 5);
+                            else if (events.get(i).getAddress().contains("KL ") || events.get(i).getAddress().equalsIgnoreCase("Library"))
+                                e = geocoder.getFromLocationName("leo and dottie kolligian library" + ucmerced, 5);
+                            else if (events.get(i).getAddress().contains("wallace dutra amphitheatre") || events.get(i).getAddress().contains("Wallace-Dutra Amphitheatre"))
+                                e = geocoder.getFromLocationName("Kelley Grove" + ucmerced, 5);
+                            else if (events.get(i).getAddress().contains("SAAC"))
+                                e = geocoder.getFromLocationName("Student Activities and Athletics Center" + ucmerced, 5);
+                            else if (events.get(i).getAddress().contains("Gallo Recreation"))
+                                e = geocoder.getFromLocationName("Joseph E. Gallo Recreation and Wellness Center" + ucmerced, 5);
+                            else if (events.get(i).getAddress().contains("Outdoor Center"))
+                                e = geocoder.getFromLocationName("Student Activities and Athletics Center" + ucmerced, 5);
+                            else if (events.get(i).getAddress().contains("Crescent Arch"))
+                                e = geocoder.getFromLocationName("Half Dome" + ucmerced, 5);
+                            else if (events.get(i).getAddress().contains("California Room"))
+                                e = geocoder.getFromLocationName("Visitor Center" + ucmerced, 5);
+                            else if (events.get(i).getAddress().contains("Bobcat Lair"))
+                                e = geocoder.getFromLocationName("leo and dottie kolligian library" + ucmerced, 5);
+                            else
+                                e = geocoder.getFromLocationName(events.get(i).getAddress() + ucmerced, 5);
+                            if (e.size() != 0) {
+                                Address address = e.get(0);
+                                events.get(i).setlongLat(address.getLongitude(), address.getLatitude());
+                            }
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -227,8 +255,8 @@ public class MainScreen extends AppCompatActivity
                     e.printStackTrace();
                 }
                 for (int i = 0; i < events.size(); i++) {
-                    Log.v("Happenings1", events.get(i).getName() + " Date: " + events.get(i).getStartDate());
-                    Log.v("Happenings2", events.get(i).getName() + " added to DB");
+                    //Log.v("Happenings1", events.get(i).getName() + " Date: " + events.get(i).getStartDate());
+                    //Log.v("Happenings2", events.get(i).getName() + " added to DB");
                     if (events.get(i).getStartDate() != null) {
                         if (events.get(i).getStartDate().contains("N/A"))
                             continue;

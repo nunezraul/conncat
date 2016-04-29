@@ -75,7 +75,7 @@ public class addEvent extends AppCompatActivity{
         DialogFragment newFragment = new DatePickerFragment(){
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
-                start_date.setText(year + "-" + month + "-" + day);
+                start_date.setText(year + "-" + (month+1) + "-" + day);
             }
         };
         newFragment.show(getFragmentManager(), "datePicker");
@@ -95,7 +95,7 @@ public class addEvent extends AppCompatActivity{
         DialogFragment newFragment = new DatePickerFragment(){
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
-                end_date.setText(year + "-" + month + "-" + day);
+                end_date.setText(year + "-" + (month+1) + "-" + day);
             }
         };
         newFragment.show(getFragmentManager(), "datePicker");

@@ -1,36 +1,28 @@
 package conncat.conncat;
 
-import android.content.Intent;
+import android.content.Context;
 import android.database.SQLException;
 import android.location.Geocoder;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
-import android.location.Address;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.List;
 
-public class MapsActivity extends Fragment implements OnMapReadyCallback {
 
+public class MapViewOnCampus extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     private MapView mapView;
 
@@ -78,7 +70,7 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback {
             e.printStackTrace();
         }
 
-        events = db.getAllEvents();
+        events = db.getOnCampusEvents();
         db.close();
 
         mapView = (MapView) view.findViewById(R.id.mapView);
@@ -113,16 +105,16 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback {
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        Geocoder geocoder = new Geocoder(getContext());
-        String ucmerced = " merced, ca";
+        //LatLng sydney = new LatLng(-34, 151);
+        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        //Geocoder geocoder = new Geocoder(getContext());
+        //String ucmerced = " merced, ca";
 
         for(int i = 0; i < events.size(); i++){
             mMap.addMarker(new MarkerOptions().position(events.get(i).getLatLng()).title(events.get(i).getName()));
         }
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.3664672, -120.4268787), 13.f));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(events.get(0).getLatLng(), 13.f));
 
     }
 
@@ -149,6 +141,4 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback {
         super.onLowMemory();
         mapView.onLowMemory();
     }
-
-
 }
