@@ -32,7 +32,7 @@ import java.util.List;
 
 
 public class OneFragment extends Fragment{
-    View view;
+       View view;
 
     private EventAdapter eventAdapter;
     private ListView listView;

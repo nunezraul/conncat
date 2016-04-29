@@ -1,12 +1,14 @@
 package conncat.conncat;
 
 
+import android.content.Intent;
 import android.database.SQLException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -23,7 +25,6 @@ public class Categories extends Fragment {
     View view;
     private ListView listView;
     private ArrayAdapter<String> listAdapter ;
-
 
     public Categories() {
         // Required empty public constructor
@@ -56,7 +57,20 @@ public class Categories extends Fragment {
         db.close();
         listAdapter = new ArrayAdapter<String>(getActivity(), R.layout.categories_content, categoriesList);
         listView.setAdapter(listAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(view.getContext(), CategorizedEvents.class);
+                intent.putExtra("category", listAdapter.getItem(position));
+                startActivity(intent);
+            }
+        });
         return view;
+
+
     }
+
+
+
 
 }
