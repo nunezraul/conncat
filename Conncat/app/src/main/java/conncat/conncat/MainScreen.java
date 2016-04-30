@@ -144,7 +144,7 @@ public class MainScreen extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             if(!navigationView.getMenu().getItem(0).isChecked()) {
-                setTitle("Conncat");
+                setTitle("ConnCat");
                 HomeScreen fragment = new HomeScreen();
                 android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container, fragment);
@@ -286,6 +286,13 @@ public class MainScreen extends AppCompatActivity
         protected void onPostExecute(String result) {
             if(result.equals(error))
                 Toast.makeText(mContex, error, Toast.LENGTH_SHORT).show();
+            /*if(navigationView.getMenu().getItem(0).isChecked()) {
+                setTitle("ConnCat");
+                HomeScreen fragment = new HomeScreen();
+                android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.commit();
+            }*/
         }
 
 

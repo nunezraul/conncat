@@ -357,6 +357,42 @@ public class EventDBHelper extends SQLiteOpenHelper {
 
     }
 
+    public EventData getEventByName(String eventName){
+        EventData eventData = new EventData();
+        String sql = "SELECT * FROM Events WHERE " + KEY_NAME + " = " + DatabaseUtils.sqlEscapeString(eventName) + ";";
+        Cursor cursor = conncat.rawQuery(sql, null);
+
+        if(cursor.moveToFirst()){
+            eventData.setName(cursor.getString(cursor.getColumnIndex(KEY_NAME)));
+            eventData.setHost(cursor.getString(cursor.getColumnIndex(KEY_HOST)));
+            eventData.setStartDate(cursor.getString(cursor.getColumnIndex(KEY_SDATE)));
+            eventData.setEndDate(cursor.getString(cursor.getColumnIndex(KEY_EDATE)));
+            eventData.setStartTime(cursor.getString(cursor.getColumnIndex(KEY_STIME)));
+            eventData.setEndTime(cursor.getString(cursor.getColumnIndex(KEY_ETIME)));
+            eventData.setAddress(cursor.getString(cursor.getColumnIndex(KEY_ADDRESS)));
+            eventData.setlongLat(cursor.getDouble(cursor.getColumnIndex(KEY_LONGITUDE)), cursor.getDouble(cursor.getColumnIndex(KEY_LATITUDE)));
+            eventData.setDescription(cursor.getString(cursor.getColumnIndex(KEY_DESCRIPTION)));
+            eventData.setSource(cursor.getString(cursor.getColumnIndex(KEY_SOURCE)));
+            eventData.setRowid(cursor.getLong(cursor.getColumnIndex(KEY_ROWID)));
+
+            String getCat = "SELECT * FROM Categories WHERE _id = " + cursor.getString(cursor.getColumnIndex(KEY_ROWID)) + ";";
+            Cursor cat = conncat.rawQuery(getCat, null);
+            int i = 0;
+            //Log.v("DATABASE", "Categories: " +cat.getColumnCount() );
+            if(cat.moveToFirst()){
+                do{
+                    eventData.addCategory(cat.getString(cat.getColumnIndex(KEY_CATEGORY)));
+                    Log.v("DATABASE", "GETTING EVENT " + eventData.getRowid() + " and shit cat: " + eventData.categories.get(i));
+                    i++;
+                }while(cat.moveToNext());
+            }
+            cat.close();
+        }
+        cursor.close();
+        return eventData;
+
+    }
+
     public List<String> getCategories(){
         List<String> categories = new ArrayList<>();
         Cursor cursor = conncat.query(true, KEY_CATEGORIES, new String[] {KEY_CATEGORY}, null, null, KEY_CATEGORY, null, KEY_CATEGORY + " ASC", null);

@@ -1,6 +1,7 @@
 package conncat.conncat;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.SQLException;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
@@ -114,7 +116,28 @@ public class MapViewOnCampus extends Fragment implements OnMapReadyCallback {
         for(int i = 0; i < events.size(); i++){
             mMap.addMarker(new MarkerOptions().position(events.get(i).getLatLng()).title(events.get(i).getName()));
         }
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(events.get(0).getLatLng(), 13.f));
+        mMap.setOnInfoWindowClickListener(
+                new GoogleMap.OnInfoWindowClickListener(){
+                    public void onInfoWindowClick(Marker marker){
+                        Intent intent = new Intent(getContext(), viewEvent.class);
+                        EventDBHelper db = new EventDBHelper(getContext());
+                        try {
+                            db.createDataBase();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        try{
+                            db.openDataBase();
+                        }catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                        EventData ev = db.getEventByName(marker.getTitle());
+                        db.close();
+                        intent.putExtra("eventID", ev.getRowid());
+                        startActivityForResult(intent, 0);
+                    }
+                });
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.3637, -120.4311), 13.f));
 
     }
 

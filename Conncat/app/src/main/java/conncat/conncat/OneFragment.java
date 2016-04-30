@@ -37,6 +37,8 @@ public class OneFragment extends Fragment{
     private EventAdapter eventAdapter;
     private ListView listView;
 
+    private static int EVENT_MODIFED = 0;
+
     public OneFragment() {
         // Required empty public constructor
     }
@@ -72,7 +74,7 @@ public class OneFragment extends Fragment{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(view.getContext(), viewEvent.class);
                 intent.putExtra("eventID", eventAdapter.getItem(position).getRowid());
-                startActivity(intent);
+                startActivityForResult(intent, EVENT_MODIFED);
             }
         });
         //setRetainInstance(true);
@@ -100,6 +102,37 @@ public class OneFragment extends Fragment{
 
     }*/
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == EVENT_MODIFED) {
+            // Make sure the request was successful
+            if (resultCode == Activity.RESULT_OK) {
+                Log.v("Event modified", "Event was RESULT_OK");
+                EventDBHelper db = new EventDBHelper(getContext());
+                try {
+                    db.createDataBase();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try{
+                    db.openDataBase();
+                }catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                List<EventData> ev = db.getAllEvents();
+                eventAdapter = new EventAdapter(getActivity(), -1, ev);
+                listView.setAdapter(eventAdapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent = new Intent(view.getContext(), viewEvent.class);
+                        intent.putExtra("eventID", eventAdapter.getItem(position).getRowid());
+                        startActivityForResult(intent, EVENT_MODIFED);
+                    }
+                });
 
+            }
+        }
+    }
 
 }

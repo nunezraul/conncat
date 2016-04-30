@@ -147,6 +147,7 @@ public class editEvent extends AppCompatActivity {
                 List<Address> e = geocoder.getFromLocationName(address.getText().toString(), 5);
                 if(e.size() != 0) {
                     Address address = e.get(0);
+                    Log.v("LatLng", "(" + address.getLatitude() + "," + address.getLongitude() + ")");
                     eventData.setlongLat(address.getLongitude() ,address.getLatitude());
                 }
             } catch (IOException e) {

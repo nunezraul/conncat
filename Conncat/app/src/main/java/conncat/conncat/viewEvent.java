@@ -1,5 +1,6 @@
 package conncat.conncat;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.SQLException;
 import android.os.Bundle;
@@ -138,6 +139,19 @@ public class viewEvent extends AppCompatActivity {
                 description.setText(eventData.getDescription());
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(EVENT_EDITED == 1) {
+            Intent returnIntent = new Intent();
+            setResult(Activity.RESULT_OK, returnIntent);
+        }
+        else{
+            Intent returnIntent = new Intent();
+            setResult(Activity.RESULT_CANCELED, returnIntent);
+        }
+        super.onBackPressed();
     }
 
 

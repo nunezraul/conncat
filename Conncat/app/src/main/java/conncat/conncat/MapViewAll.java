@@ -122,7 +122,28 @@ public class MapViewAll extends Fragment implements OnMapReadyCallback {
         for(int i = 0; i < events.size(); i++){
             mMap.addMarker(new MarkerOptions().position(events.get(i).getLatLng()).title(events.get(i).getName()));
         }
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.3664672, -120.4268787), 13.f));
+        mMap.setOnInfoWindowClickListener(
+                new GoogleMap.OnInfoWindowClickListener(){
+                    public void onInfoWindowClick(Marker marker){
+                        Intent intent = new Intent(getContext(), viewEvent.class);
+                        EventDBHelper db = new EventDBHelper(getContext());
+                        try {
+                            db.createDataBase();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        try{
+                            db.openDataBase();
+                        }catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                        EventData ev = db.getEventByName(marker.getTitle());
+                        db.close();
+                        intent.putExtra("eventID", ev.getRowid());
+                        startActivityForResult(intent, 0);
+                    }
+                });
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.348176, -120.441028), 12.f));
 
     }
 
