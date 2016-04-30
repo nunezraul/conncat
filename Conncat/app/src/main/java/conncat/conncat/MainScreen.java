@@ -294,6 +294,7 @@ public class MainScreen extends AppCompatActivity
     public boolean onQueryTextSubmit(String query) {
         final Context context = this;
         Intent intent = new Intent(context, SearchActivity.class);
+        intent.putExtra("searchQuery", query);
         startActivity(intent);
         // User pressed the search button
         return false;

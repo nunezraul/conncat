@@ -21,6 +21,14 @@
 
 
     </android.support.design.widget.AppBarLayout>
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/eventList"
+        android:divider="@null"
+        android:layout_marginTop="@dimen/abc_action_bar_default_height_material"
+        />
+
 
     <include layout="@layout/content_search" />
 

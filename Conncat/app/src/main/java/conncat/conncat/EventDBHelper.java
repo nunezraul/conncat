@@ -403,6 +403,41 @@ public class EventDBHelper extends SQLiteOpenHelper {
         return events;
     }
 
+    public List<EventData> search(String query){
+        String sql = "SELECT * FROM Events WHERE " + KEY_NAME + " LIKE " + DatabaseUtils.sqlEscapeString("%" + query + "%") + " ORDER BY date(start_date);";
+        Cursor cursor = conncat.rawQuery(sql, null);
+        List<EventData> ed = new ArrayList<>();
+        if(cursor.moveToFirst()){
+            do{
+                EventData eventData = new EventData();
+                eventData.setName(cursor.getString(cursor.getColumnIndex(KEY_NAME)));
+                eventData.setHost(cursor.getString(cursor.getColumnIndex(KEY_HOST)));
+                eventData.setStartDate(cursor.getString(cursor.getColumnIndex(KEY_SDATE)));
+                eventData.setEndDate(cursor.getString(cursor.getColumnIndex(KEY_EDATE)));
+                eventData.setStartTime(cursor.getString(cursor.getColumnIndex(KEY_STIME)));
+                eventData.setEndTime(cursor.getString(cursor.getColumnIndex(KEY_ETIME)));
+                eventData.setAddress(cursor.getString(cursor.getColumnIndex(KEY_ADDRESS)));
+                eventData.setlongLat(cursor.getDouble(cursor.getColumnIndex(KEY_LONGITUDE)), cursor.getDouble(cursor.getColumnIndex(KEY_LATITUDE)));
+                eventData.setDescription(cursor.getString(cursor.getColumnIndex(KEY_DESCRIPTION)));
+                eventData.setSource(cursor.getString(cursor.getColumnIndex(KEY_SOURCE)));
+                eventData.setRowid(cursor.getLong(cursor.getColumnIndex(KEY_ROWID)));
+
+                String getCat = "SELECT * FROM Categories WHERE _id = " + cursor.getString(cursor.getColumnIndex(KEY_ROWID)) + ";";
+                Cursor cat = conncat.rawQuery(getCat, null);
+                if(cat.moveToFirst()){
+                    do{
+                        eventData.addCategory(cat.getString(cat.getColumnIndex(KEY_CATEGORY)));
+                    }while(cat.moveToNext());
+                }
+                cat.close();
+                ed.add(eventData);
+
+            }while(cursor.moveToNext());
+        }
+        cursor.close();
+        return ed;
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
 
