@@ -371,7 +371,7 @@ public class EventDBHelper extends SQLiteOpenHelper {
 
     public List<EventData> getEventsByCategory(String category){
         List<EventData> events = new ArrayList<>();
-        Cursor cursor = conncat.rawQuery("SELECT * FROM EVENTS WHERE "+ KEY_ROWID + " = (SELECT " + KEY_ROWID + " FROM " + KEY_CATEGORIES + " WHERE " + KEY_CATEGORY + " LIKE " + DatabaseUtils.sqlEscapeString("%" + category + "%") + ") ORDER BY date(start_date);", null);
+        Cursor cursor = conncat.rawQuery("SELECT * FROM " + KEY_EVENTS + " WHERE "+ KEY_ROWID + " IN (SELECT " + KEY_ROWID + " FROM " + KEY_CATEGORIES + " WHERE " + KEY_CATEGORY + " = " + DatabaseUtils.sqlEscapeString(category) + ") ORDER BY date(start_date);", null);
         //Cursor cursor = conncat.query(KEY_EVENTS, null, KEY_CATEGORY + " LIKE ?", new String[]{DatabaseUtils.sqlEscapeString("%" + category + "%")}, null, null, KEY_SDATE + " ASC");
         if(cursor.moveToFirst()) {
             do{
