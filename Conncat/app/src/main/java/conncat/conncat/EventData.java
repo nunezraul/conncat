@@ -195,6 +195,10 @@ public class EventData {
         return endDate;
     }
 
+    public String getStartTime(){ return startTime; }
+
+    public String getEndTime() { return  endTime; }
+
     /**
      * returns the address of the event
      * @return the address of the event

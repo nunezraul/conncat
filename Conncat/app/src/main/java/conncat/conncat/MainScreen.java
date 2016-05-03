@@ -47,6 +47,8 @@ public class MainScreen extends AppCompatActivity
    // private ViewPager viewPager;
     private FloatingActionButton fab;
 
+    static final int ADD_EVENT = 1;  // The request code
+
 
     /*
     This function initializes the toolbar, tabLayout, and fab. The tabLayout is used to view All, On Campus, and OffCampus events.
@@ -87,7 +89,7 @@ public class MainScreen extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainScreen.this, addEvent.class);
-                startActivity(i);
+                startActivityForResult(i, ADD_EVENT);
             }
         });
         updateDB();
@@ -174,6 +176,17 @@ public class MainScreen extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == ADD_EVENT) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                Log.v("Add Event", "Event was RESULT_OK");
+            }
+        }
+    }
+
     public void updateDB(){
         String[] eventURLs = {"http://events.ucmerced.edu:7070/feeder/main/eventsFeed.do?f=y&sort=dtstart.utc:asc&fexpr=(categories.href!=%22/public/.bedework/categories/sys/Ongoing%22)%20and%20(entity_type=%22event%22%7Centity_type=%22todo%22)&skinName=list-xml&count=200", "https://drive.google.com/uc?export=download&id=0BwCHu0WyYCBkc21NblUtR1Z1MGM"};
         ConnectivityManager connMgr = (ConnectivityManager)
@@ -206,38 +219,13 @@ public class MainScreen extends AppCompatActivity
                 List<EventData> events = xmlParser.getEvents(new ByteArrayInputStream(result.getBytes()));
                 Geocoder geocoder = new Geocoder(mContex);
 
-                String ucmerced = " merced, ca";
+                AddressParser addressParser = new AddressParser();
                 for (int i = 0; i < events.size(); i++) {
                     try {
                         List<Address> e;
                         if(events.get(i).getAddress() != null) {
-                            Log.v("Event: ", events.get(i).getAddress() + ucmerced);
-                            if (events.get(i).getAddress().contains("SE2"))
-                                e = geocoder.getFromLocationName("Science and Engineering Building 2" + ucmerced, 5);
-                            else if (events.get(i).getAddress().contains("SE1"))
-                                e = geocoder.getFromLocationName("Science and Engineering Building 1" + ucmerced, 5);
-                            else if (events.get(i).getAddress().contains("SSM"))
-                                e = geocoder.getFromLocationName("Social Science and Management building" + ucmerced, 5);
-                            else if (events.get(i).getAddress().contains("SSB"))
-                                e = geocoder.getFromLocationName("Student Services Building" + ucmerced, 5);
-                            else if (events.get(i).getAddress().contains("KL ") || events.get(i).getAddress().equalsIgnoreCase("Library"))
-                                e = geocoder.getFromLocationName("leo and dottie kolligian library" + ucmerced, 5);
-                            else if (events.get(i).getAddress().contains("wallace dutra amphitheatre") || events.get(i).getAddress().contains("Wallace-Dutra Amphitheatre"))
-                                e = geocoder.getFromLocationName("Kelley Grove" + ucmerced, 5);
-                            else if (events.get(i).getAddress().contains("SAAC"))
-                                e = geocoder.getFromLocationName("Student Activities and Athletics Center" + ucmerced, 5);
-                            else if (events.get(i).getAddress().contains("Gallo Recreation"))
-                                e = geocoder.getFromLocationName("Joseph E. Gallo Recreation and Wellness Center" + ucmerced, 5);
-                            else if (events.get(i).getAddress().contains("Outdoor Center"))
-                                e = geocoder.getFromLocationName("Student Activities and Athletics Center" + ucmerced, 5);
-                            else if (events.get(i).getAddress().contains("Crescent Arch"))
-                                e = geocoder.getFromLocationName("Half Dome" + ucmerced, 5);
-                            else if (events.get(i).getAddress().contains("California Room"))
-                                e = geocoder.getFromLocationName("Visitor Center" + ucmerced, 5);
-                            else if (events.get(i).getAddress().contains("Bobcat Lair"))
-                                e = geocoder.getFromLocationName("leo and dottie kolligian library" + ucmerced, 5);
-                            else
-                                e = geocoder.getFromLocationName(events.get(i).getAddress() + ucmerced, 5);
+                            Log.v("Event", events.get(i).getAddress());
+                            e = geocoder.getFromLocationName(addressParser.getAddress(events.get(i).getAddress()), 5);
                             if (e.size() != 0) {
                                 Address address = e.get(0);
                                 events.get(i).setlongLat(address.getLongitude(), address.getLatitude());
@@ -261,8 +249,6 @@ public class MainScreen extends AppCompatActivity
                     e.printStackTrace();
                 }
                 for (int i = 0; i < events.size(); i++) {
-                    //Log.v("Happenings1", events.get(i).getName() + " Date: " + events.get(i).getStartDate());
-                    //Log.v("Happenings2", events.get(i).getName() + " added to DB");
                     if (events.get(i).getStartDate() != null) {
                         if (events.get(i).getStartDate().contains("N/A"))
                             continue;

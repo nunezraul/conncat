@@ -8,7 +8,8 @@
     <string name="large_text">
         "categories page"
     </string>
-    <string name="title_activity_edit_event">editEvent</string>
+    <string name="title_activity_edit_event">Edit Event</string>
+    <string name="title_save_event">Save Event</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_map_view">MapView</string>
     <string name="section_format">Hello World from section: %1$d</string>

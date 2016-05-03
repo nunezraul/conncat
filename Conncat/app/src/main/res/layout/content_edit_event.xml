@@ -13,174 +13,192 @@
     tools:showIn="@layout/activity_edit_event">
 
     <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/toolbar_top"
+        android:layout_below="@id/appbar"
         android:layout_alignParentBottom="true">
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <EditText
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/title"
-                android:hint="Title"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true" />
+                android:id="@+id/timeIcon"
+                android:padding="10dp"
+                android:src="@drawable/ic_access_time_black_18dp"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time and Date"
+                android:id="@+id/timeDate"
+                android:paddingBottom="5dp"
+                android:layout_toEndOf="@+id/timeIcon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Medium Text"
+                android:id="@+id/start_date"
+                android:paddingBottom="10dp"
+                android:layout_below="@+id/timeDate"
+                android:onClick="setStartDate"
+                android:layout_toEndOf="@+id/timeIcon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Medium Text"
+                android:id="@+id/start_time"
+                android:onClick="setStartTime"
+                android:paddingBottom="10dp"
+                android:paddingRight="8dp"
+                android:layout_below="@+id/timeDate"
+                android:layout_alignParentRight="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Medium Text"
+                android:id="@+id/end_date"
+                android:onClick="setEndDate"
+                android:layout_below="@+id/start_date"
+                android:layout_toEndOf="@+id/timeIcon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Medium Text"
+                android:id="@+id/end_time"
+                android:onClick="setEndTime"
+                android:paddingBottom="10dp"
+                android:paddingRight="8dp"
+                android:layout_below="@+id/start_time"
+                android:layout_alignParentRight="true" />
+
+            <View
+                style="@style/Divider"
+                android:id="@+id/divider1"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:layout_below="@id/end_date"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/locationIcon"
+                android:padding="10dp"
+                android:src="@drawable/ic_edit_location_black_18dp"
+                android:layout_below="@id/divider1"
+                android:layout_alignParentStart="true" />
 
             <EditText
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/location"
-                android:hint="Address"
-                android:layout_below="@+id/title"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true" />
+                android:hint="Add a location"
+                android:layout_below="@+id/divider1"
+                android:layout_marginTop="16dp"
+                android:singleLine="true"
+                android:background="@android:color/transparent"
+                android:layout_toEndOf="@+id/locationIcon"/>
 
-            <TextView
+            <View
+                style="@style/Divider"
+                android:id="@+id/divider2"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:layout_below="@id/locationIcon"/>
+
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Start"
-                android:id="@+id/Start"
-                android:layout_marginTop="20dp"
-                android:layout_below="@+id/location"
+                android:id="@+id/hostIcon"
+                android:padding="10dp"
+                android:src="@drawable/ic_people_black_18dp"
+                android:layout_below="@id/divider2"
                 android:layout_alignParentStart="true" />
 
             <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/start_date"
-                android:layout_below="@+id/Start"
-                android:layout_alignParentStart="true"
-                android:layout_toStartOf="@+id/set_start_date" />
-
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Set Date"
-                android:id="@+id/set_start_date"
-                android:onClick="setStartDate"
-                android:layout_below="@+id/Start"
-                android:layout_alignParentEnd="true" />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/start_time"
-                android:layout_below="@+id/set_start_date"
-                android:layout_alignParentStart="true"
-                android:layout_toStartOf="@+id/set_start_date" />
-
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Set Time"
-                android:id="@+id/set_start_time"
-                android:onClick="setStartTime"
-                android:layout_alignBottom="@+id/start_time"
-                android:layout_alignStart="@+id/set_start_date" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="End"
-                android:id="@+id/end"
-                android:layout_below="@+id/start_time"
-                android:layout_alignParentStart="true" />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/end_date"
-                android:layout_below="@+id/end"
-                android:layout_alignParentStart="true"
-                android:layout_alignEnd="@+id/start_time" />
-
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Set Date"
-                android:id="@+id/set_end_date"
-                android:onClick="SetEndDate"
-                android:layout_alignBottom="@+id/end_date"
-                android:layout_alignStart="@+id/set_start_time" />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/end_time"
-                android:layout_below="@+id/end_date"
-                android:layout_alignParentStart="true"
-                android:layout_alignEnd="@+id/end_date" />
-
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Set Time"
-                android:id="@+id/set_end_time"
-                android:onClick="setEndTime"
-                android:layout_alignBottom="@+id/end_time"
-                android:layout_alignStart="@+id/set_end_date" />
-
-            <EditText
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/host"
-                android:hint="Host"
-                android:layout_below="@+id/end_time"
-                android:layout_alignParentStart="true"
-                android:layout_alignEnd="@+id/location" />
+                android:hint="Enter host"
+                android:singleLine="true"
+                android:layout_below="@+id/divider2"
+                android:background="@android:color/transparent"
+                android:layout_toEndOf="@+id/hostIcon"
+                android:layout_marginTop="16dp"/>
 
-            <EditText
+
+            <View
+                style="@style/Divider"
+                android:id="@+id/divider3"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:layout_below="@id/hostIcon"/>
+
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="textMultiLine"
-                android:ems="10"
-                android:id="@+id/description"
-                android:hint="Description"
-                android:layout_below="@+id/host"
-                android:layout_alignParentStart="true"
-                android:height="130dp"
-                android:layout_alignEnd="@+id/set_end_time" />
+                android:id="@+id/categoriesIcon"
+                android:padding="10dp"
+                android:src="@drawable/ic_filter_list_black_18dp"
+                android:layout_below="@id/divider3"
+                android:layout_alignParentStart="true" />
 
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/categories"
                 android:hint="Enter categories separated by commas"
-                android:layout_below="@+id/description"
-                android:layout_alignParentStart="true"
-                android:layout_alignEnd="@+id/location" />
+                android:layout_marginTop="14dp"
+                android:background="@android:color/transparent"
+                android:layout_below="@+id/divider3"
+                android:inputType="textShortMessage|textMultiLine"
+                android:layout_toEndOf="@id/categoriesIcon"/>
 
-            <Button
+            <View
+                style="@style/Divider"
+                android:id="@+id/divider4"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/categories"/>
+
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Save Event"
-                android:onClick="saveEvent"
-                android:id="@+id/eventButton"
-                android:layout_marginBottom="22dp"
-                android:textColor = "#FFFFFF"
-                android:background="?attr/colorPrimary"
-                android:textSize = "20sp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:layout_below="@+id/categories"
-                android:layout_centerInParent="true"/>
+                android:id="@+id/descriptionIcon"
+                android:padding="10dp"
+                android:src="@drawable/ic_short_text_black_18dp"
+                android:layout_below="@id/divider4"
+                android:layout_alignParentStart="true" />
 
             <EditText
-                android:layout_width="wrap_content"
+
+                android:inputType="textMultiLine"
+                android:gravity="start"
                 android:layout_height="wrap_content"
-                android:id="@+id/rowid"
-                android:hint="rowid"
-                android:layout_below="@+id/eventButton"
-                android:layout_alignParentStart="true" />
+                android:layout_width="fill_parent"
+                android:scrollbars="vertical"
+                android:ems="10"
+                android:id="@+id/description"
+                android:hint="Enter a description"
+                android:layout_below="@+id/divider4"
+                android:layout_marginTop="14dp"
+                android:background="@android:color/transparent"
+                android:layout_toEndOf="@+id/descriptionIcon"/>
+
 
 
         </RelativeLayout>
