@@ -4,20 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.SQLException;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
-import java.util.Objects;
 
 public class viewEvent extends AppCompatActivity {
     private EventData eventData;
@@ -62,10 +56,14 @@ public class viewEvent extends AppCompatActivity {
 
         }
 
+
+        String date = eventData.getStartDate();
+        String[] data = date.split("-");
+
         setTitle(eventData.getName());
         title.setText(eventData.getName());
-        eventDate.setText(eventData.getStartDate());
-        eventTime.setText(eventData.startTime);
+        eventDate.setText(getMonth(data[1]) + " " + data[2] + ", " + data[0]);
+        eventTime.setText(get12hrtime(eventData.startTime) + " - " + get12hrtime(eventData.endTime));
         String cat = "";
         for(int i = 0; i < eventData.categories.size(); i++){
             cat += eventData.categories.get(i) + ", ";
@@ -154,5 +152,79 @@ public class viewEvent extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    /*
+    This function will return the month's name given the month number
 
+    @param month    the month number
+    @return monthString     the name of the month
+     */
+    public String getMonth(String month){
+        String monthString = "";
+        switch(month){
+            case "1":
+            case "01":
+                monthString = "January";
+                break;
+            case "2":
+            case "02":
+                monthString = "February";
+                break;
+            case "3":
+            case "03":
+                monthString = "March";
+                break;
+            case "4":
+            case "04":
+                monthString = "April";
+                break;
+            case "5":
+            case "05":
+                monthString = "May";
+                break;
+            case "6":
+            case "06":
+                monthString = "June";
+                break;
+            case "7":
+            case "07":
+                monthString = "July";
+                break;
+            case "8":
+            case "08":
+                monthString = "August";
+                break;
+            case "9":
+            case "09":
+                monthString = "September";
+                break;
+            case "10":
+                monthString = "October";
+                break;
+            case "11":
+                monthString = "November";
+                break;
+            case "12":
+                monthString = "December";
+                break;
+
+        }
+        return monthString;
+    }
+
+    public String get12hrtime (String time ){
+        String[] data = time.split(":");
+
+        int hr = Integer.valueOf(data[0]);
+        String min = data[1];
+
+        String newtime;
+
+        if (hr >= 12){
+            if (hr > 12)
+                hr = hr - 12;
+            newtime = hr + ":" + min + " PM";
+        }
+        else newtime = hr + ":" + min + " AM";
+        return newtime;
+    }
 }
