@@ -60,7 +60,7 @@ public class viewEvent extends AppCompatActivity {
         String date = eventData.getStartDate();
         String[] data = date.split("-");
 
-        setTitle(eventData.getName());
+        setTitle("");
         title.setText(eventData.getName());
         eventDate.setText(getMonth(data[1]) + " " + data[2] + ", " + data[0]);
         eventTime.setText(get12hrtime(eventData.startTime) + " - " + get12hrtime(eventData.endTime));
