@@ -14,4 +14,4 @@ ConnCat is an Android application designed to connect UC Merced students with ev
 * View by categories
 * Search
 
-[!Conncat](http://imgur.com/BLGJ8BF.jpg)
+![Conncat](http://imgur.com/BLGJ8BF.jpg)
